@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,34 +18,42 @@ import com.example.rxjavaandretrofit.R;
 import com.example.rxjavaandretrofit.TrendingFailedFragment;
 import com.example.rxjavaandretrofit.TrendingSuccessFragment;
 
+//用于管理fragment
 public abstract class BaseActivity extends AppCompatActivity {
     public boolean connection;
+    public Button restartButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
+        restartButton = findViewById(R.id.restartButton);
         connection();
         setFragment();
     }
 
+    //检查网络连接以切换fragment
     public void setFragment() {
         TrendingSuccessFragment successFragment = new TrendingSuccessFragment();
         TrendingFailedFragment failedFragment = new TrendingFailedFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment;
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (connection)
+        if (connection) {
             fragment = successFragment;
-        else
+            restartButton.setVisibility(View.GONE);
+        }
+        else {
             fragment = failedFragment;
+        }
 
-        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
     }
 
+    //检查网络连接
     public void connection() {
         ConnectivityManager conn = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo net = conn.getActiveNetworkInfo();
@@ -50,6 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             connection = true;
         } else {
             connection = false;
+            Toast.makeText(this, "啪的一下，网络没了", Toast.LENGTH_SHORT).show();
         }
     }
 }

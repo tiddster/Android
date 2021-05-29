@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,5 +23,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TrendingActivity extends BaseActivity {
+
+    //重新加载的按钮
+    public void onClickRestart(View view){
+        connection();
+        setFragment();
+    }
 
 }
