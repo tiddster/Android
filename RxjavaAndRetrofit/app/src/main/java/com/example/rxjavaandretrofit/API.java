@@ -1,5 +1,9 @@
 package com.example.rxjavaandretrofit;
 
+import com.example.rxjavaandretrofit.bean.Trending;
+import com.example.rxjavaandretrofit.bean.TrendingDeveloperItems;
+import com.example.rxjavaandretrofit.bean.TrendingRepositoryItems;
+
 import java.util.Map;
 
 import io.reactivex.Observable;
