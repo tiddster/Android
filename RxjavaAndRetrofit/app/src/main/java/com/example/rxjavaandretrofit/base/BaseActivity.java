@@ -15,8 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.rxjavaandretrofit.R;
-import com.example.rxjavaandretrofit.TrendingFailedFragment;
-import com.example.rxjavaandretrofit.TrendingSuccessFragment;
+import com.example.rxjavaandretrofit.view.TrendingFailed;
+import com.example.rxjavaandretrofit.view.TrendingSuccess;
 
 //用于管理fragment
 public abstract class BaseActivity extends AppCompatActivity {
@@ -27,15 +27,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
-        restartButton = findViewById(R.id.restartButton);
+
+        initView();
         connection();
         setFragment();
     }
 
     //检查网络连接以切换fragment
     public void setFragment() {
-        TrendingSuccessFragment successFragment = new TrendingSuccessFragment();
-        TrendingFailedFragment failedFragment = new TrendingFailedFragment();
+        TrendingSuccess successFragment = new TrendingSuccess();
+        TrendingFailed failedFragment = new TrendingFailed();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
@@ -64,4 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             Toast.makeText(this, "啪的一下，网络没了", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void initView(){}
 }

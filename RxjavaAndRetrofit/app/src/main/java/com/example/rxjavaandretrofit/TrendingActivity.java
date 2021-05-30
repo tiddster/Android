@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,11 @@ public class TrendingActivity extends BaseActivity {
     public void onClickRestart(View view){
         connection();
         setFragment();
+    }
+
+    @Override
+    public void initView(){
+        restartButton = findViewById(R.id.restartButton);
     }
 
 }

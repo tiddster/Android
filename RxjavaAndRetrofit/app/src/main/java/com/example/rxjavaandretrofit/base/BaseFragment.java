@@ -22,23 +22,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class BaseFragment extends Fragment{
-    public Retrofit mRetrofit;
-    public Map<String,String> params;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetrofit();
     }
 
-    public void setRetrofit(){
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl("https://trendings.herokuapp.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
-
-        params = new HashMap<>();
-        params.put("lang","java");
-        params.put("since","weekly");
-    }
 }
