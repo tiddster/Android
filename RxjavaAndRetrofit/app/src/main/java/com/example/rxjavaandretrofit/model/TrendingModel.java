@@ -5,7 +5,9 @@ import com.example.rxjavaandretrofit.bean.Trending;
 import com.example.rxjavaandretrofit.bean.TrendingRepositoryItems;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observer;
@@ -31,7 +33,7 @@ public class TrendingModel implements ResponseModel{
         params.put("lang","java");
         params.put("since","weekly");
 
-        StringBuilder text = new StringBuilder();
+        List<TrendingRepositoryItems> list = new ArrayList<>();
 
         API api = mRetrofit.create(API.class);
         api.GetTrendingRepository(params).subscribeOn(Schedulers.io())               //在IO线程进行网络请求
@@ -45,8 +47,9 @@ public class TrendingModel implements ResponseModel{
                     @Override
                     public void onNext(Trending<TrendingRepositoryItems> value) {
                         for (int i = 0; i < value.getItems().size(); i++) {
-                            text.append(value.getItems().get(i).getAdded_stars()).append("\n");
+                            list.add(value.getItems().get(i));
                         }
+                        responseListener.requestSuccess(list);
                     }
 
                     @Override
@@ -56,7 +59,7 @@ public class TrendingModel implements ResponseModel{
 
                     @Override
                     public void onComplete() {
-                        responseListener.requestSuccess();
+                        responseListener.requestOver();
                     }
                 });
     }
