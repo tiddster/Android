@@ -15,8 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.rxjavaandretrofit.R;
-import com.example.rxjavaandretrofit.view.TrendingFailed;
-import com.example.rxjavaandretrofit.view.TrendingSuccess;
+import com.example.rxjavaandretrofit.view.SearchingFailed;
+import com.example.rxjavaandretrofit.view.SearchingSuccess;
 
 //用于管理fragment
 public abstract class BaseActivity extends AppCompatActivity {
@@ -35,8 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     //检查网络连接以切换fragment
     public void setFragment() {
-        TrendingSuccess successFragment = new TrendingSuccess();
-        TrendingFailed failedFragment = new TrendingFailed();
+        SearchingSuccess successFragment = new SearchingSuccess();
+        SearchingFailed failedFragment = new SearchingFailed();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);

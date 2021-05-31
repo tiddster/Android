@@ -1,6 +1,6 @@
 package com.example.rxjavaandretrofit.model;
 
-import com.example.rxjavaandretrofit.bean.TrendingRepositoryItems;
+import com.example.rxjavaandretrofit.bean.SearchingItems;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ public interface ResponseListener {
 
     void requestFail();
 
-    void requestSuccess(List<TrendingRepositoryItems> list);
+    void requestSuccess(List<SearchingItems> list);
 }
