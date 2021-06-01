@@ -20,16 +20,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SearchingModel implements ResponseModel{
 
     @Override
-    public void GetSearching(ResponseListener responseListener) {
+    public void GetSearching(ResponseListener responseListener, String language) {
         Retrofit mRetrofit;
-        String language,token;
+        String token;
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com/search/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
-        language = "Python";
-        token = "token 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";
+        token = "token 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";
 
         List<SearchingItems> list = new ArrayList<>();
 
@@ -44,6 +43,7 @@ public class SearchingModel implements ResponseModel{
 
                     @Override
                     public void onNext(Searching<SearchingItems> value) {
+                        //将Items一个一个读取到新列表中，默认30个
                         for (int i = 0; i < value.getItems().size(); i++) {
                             list.add(value.getItems().get(i));
                         }

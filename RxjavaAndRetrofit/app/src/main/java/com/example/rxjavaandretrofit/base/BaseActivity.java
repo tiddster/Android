@@ -22,6 +22,7 @@ import com.example.rxjavaandretrofit.view.SearchingSuccess;
 public abstract class BaseActivity extends AppCompatActivity {
     public boolean connection;
     public Button restartButton;
+    public Fragment fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         connection();
         setFragment();
+        Listener();
     }
 
     //检查网络连接以切换fragment
@@ -39,7 +41,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         SearchingFailed failedFragment = new SearchingFailed();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (connection) {
@@ -67,4 +68,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void initView(){}
+
+    public void Listener(){}
 }

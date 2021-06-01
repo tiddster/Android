@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,4 +38,8 @@ public class SearchingActivity extends BaseActivity {
         restartButton = findViewById(R.id.restartButton);
     }
 
+    @Override
+    public void Listener(){
+
+    }
 }
