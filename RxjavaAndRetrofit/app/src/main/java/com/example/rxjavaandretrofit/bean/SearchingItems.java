@@ -13,6 +13,9 @@ public class SearchingItems {
      * description : My Python Examples        仓库描述
      *
      */
+    /**
+     * login : TheAlgorithms
+     */
 
     private int id;
     private String language;
@@ -20,8 +23,11 @@ public class SearchingItems {
     private int forks;
     private int stargazers_count;
     private String git_url;
-
+    private OwnerBean owner;
     private String description;
+
+    private boolean show_details = false;
+
 
     public int getId() {
         return id;
@@ -77,5 +83,33 @@ public class SearchingItems {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public OwnerBean getOwner() {
+        return owner;
+    }
+
+    public void setOwner(OwnerBean owner) {
+        this.owner = owner;
+    }
+
+    public static class OwnerBean {
+        private String login;
+
+        public String getLogin() {
+            return login;
+        }
+
+        public void setLogin(String login) {
+            this.login = login;
+        }
+    }
+
+    public boolean isShow_details() {
+        return show_details;
+    }
+
+    public void setShow_details(boolean show_details) {
+        this.show_details = show_details;
     }
 }
