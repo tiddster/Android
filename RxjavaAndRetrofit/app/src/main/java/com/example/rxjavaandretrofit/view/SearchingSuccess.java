@@ -3,11 +3,14 @@ package com.example.rxjavaandretrofit.view;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchingSuccess extends BaseFragment implements SearchingView {
-    public TextView searchTitle;
+    public boolean searched = false;
+    public String searchingText = null;
+    public TextView searchTitle,searching;
     public EditText search;
-    public ImageView Mag;
+    public ImageView Mag,sort;
     public SearchingPresenter mSearchingPresenter;
     public RecyclerView mRecyclerView;
     public SearchAdapter mAdapter;
@@ -52,7 +57,10 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
         searchTitle = view.findViewById(R.id.search_title);
         search = view.findViewById(R.id.search_edit);
         Mag = view.findViewById(R.id.mag);
-        //repo = view.findViewById(R.id.repo);
+        searching = view.findViewById(R.id.searching);
+        sort = view.findViewById(R.id.sort);
+        searching.setVisibility(View.GONE);
+        sort.setVisibility(View.INVISIBLE);
 
         Show_Search_Title(true);
     }
@@ -61,9 +69,17 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
         Mag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToSearch(search.getText().toString());
+                searchingText = search.getText().toString();
+                ToSearch(searchingText,null);
                 search.setText("");
+                searched = true;
                 Show_Search_Title(true);
+                searching.setVisibility(View.VISIBLE);
+
+                //清空上一次搜索数据
+                if (mRecyclerView.getChildCount() > 0 ) {
+                    mRecyclerView.setAdapter(null);
+                }
             }
         });
 
@@ -71,6 +87,13 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
             @Override
             public void onClick(View v) {
                 Show_Search_Title(false);
+            }
+        });
+
+        sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initPopupWindow();
             }
         });
     }
@@ -81,13 +104,90 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
             Mag.setVisibility(View.INVISIBLE);
             search.setVisibility(View.INVISIBLE);
             searchTitle.setVisibility(View.VISIBLE);
+            if(searched){
+                searchTitle.setText("G I T  R E P O");
+                sort.setVisibility(View.VISIBLE);
+            }
         } else {
             Mag.setVisibility(View.VISIBLE);
             search.setVisibility(View.VISIBLE);
             searchTitle.setVisibility(View.INVISIBLE);
+            sort.setVisibility(View.INVISIBLE);
         }
     }
     //----------------------------------------------------------------------------------------------
+
+
+
+    //搜索相关---------------------------------------------------------------------------------------
+    public void ToSearch(String lang, String sort) {
+        mSearchingPresenter.GetSearchingInfo(lang,sort);
+    }
+
+    @Override
+    public void ShowRepoInfo(List<SearchingItems> list) {
+        searching.setVisibility(View.GONE);
+        mItemsList = list;
+
+        mAdapter = new SearchAdapter(mItemsList);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClick(new OnItemClick() {
+            @Override
+            public void onItemClick() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void ShowError() {
+        Toast.makeText(getActivity(), "搜半天搜了个寂寞", Toast.LENGTH_SHORT).show();
+        sort.setVisibility(View.GONE);
+        searching.setVisibility(View.GONE);
+    }
+    //----------------------------------------------------------------------------------------------
+
+
+    //弹窗相关---------------------------------------------------------------------------------------
+    public void initPopupWindow(){
+        View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.popupwindow, null, false);
+        Button default_sort,stars_sort,forks_sort,update_sort;
+        final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        //参数为1.View 2.宽度 3.高度
+        popupWindow.setOutsideTouchable(true);//设置点击外部区域可以取消popupWindow
+        popupWindow.setFocusable(true);
+
+        default_sort = view.findViewById(R.id.default_sort);
+        stars_sort = view.findViewById(R.id.stars_sort);
+        forks_sort = view.findViewById(R.id.forks_sort);
+        update_sort = view.findViewById(R.id.update_sort);
+
+        ClickListener(default_sort,"default");
+        ClickListener(stars_sort,"stars");
+        ClickListener(forks_sort,"forks");
+        ClickListener(update_sort,"updated");
+
+        popupWindow.showAsDropDown(sort);
+    }
+
+    public void ClickListener(Button button, String SORT){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searching.setVisibility(View.VISIBLE);
+                if (mRecyclerView.getChildCount() > 0 ) {
+                    mRecyclerView.setAdapter(null);
+                }
+
+                ToSearch(searchingText, SORT);
+
+            }
+        });
+    }
+    //----------------------------------------------------------------------------------------------
+
+
 
     //列表相关---------------------------------------------------------------------------------------
     private class SearchHodler extends RecyclerView.ViewHolder{
@@ -169,9 +269,8 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
         public void onBindViewHolder(@NonNull SearchHodler holder, int position) {
             SearchingItems searchingItems = mSearchingItemsList.get(position);
             holder.bind(searchingItems,position);
+
             new LoadImage(holder.avatar).execute(searchingItems.getOwner().getAvatar_url());
-
-
 
             if(mOnItemClick != null) {
                 holder.mConstraintLayout.setOnClickListener(new View.OnClickListener() {
@@ -198,56 +297,4 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
     }
     //----------------------------------------------------------------------------------------------
 
-    //搜索相关---------------------------------------------------------------------------------------
-    public void ToSearch(String lang) {
-        mSearchingPresenter.GetSearchingInfo(lang);
-    }
-
-    @Override
-    public void ShowRepoInfo(List<SearchingItems> list) {
-        mItemsList = list;
-
-        mAdapter = new SearchAdapter(mItemsList);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mAdapter.setOnItemClick(new OnItemClick() {
-            @Override
-            public void onItemClick() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    @Override
-    public void ShowError() {
-        Toast.makeText(getActivity(), "你搜了个寂寞", Toast.LENGTH_SHORT).show();
-    }
-
-    /*
-    public static Bitmap getHttpBitmap(String url) {
-        URL myFileUrl = null;
-        Bitmap bitmap = null;
-        try {
-            Log.d("TAG", url);
-            myFileUrl = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
-            conn.setConnectTimeout(0);
-            conn.setDoInput(true);
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            bitmap = BitmapFactory.decodeStream(is);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
-     */
-    
-    //----------------------------------------------------------------------------------------------
 }

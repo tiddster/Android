@@ -120,4 +120,5 @@ public class SearchingItems {
     public void setShow_details(boolean show_details) {
         this.show_details = show_details;
     }
+
 }

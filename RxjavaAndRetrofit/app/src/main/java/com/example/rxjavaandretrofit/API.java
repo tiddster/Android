@@ -15,5 +15,6 @@ public interface API {
     //获取趋势仓库
     @GET("repositories")
     Observable<Searching<SearchingItems>> GetRepository(@Query("q") String language,
-                                                        @Header("Authorization") String token);
+                                                        @Header("Authorization") String token,
+                                                        @Query("sort") String Sort);
 }

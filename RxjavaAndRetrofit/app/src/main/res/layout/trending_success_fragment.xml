@@ -24,9 +24,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mag"></View>
+
         <TextView
             android:id="@+id/search_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="S e a r c h   G I T   R e p o"
@@ -60,5 +69,26 @@
             app:layout_constraintTop_toTopOf="@+id/search_edit"
             app:srcCompat="@mipmap/fangdajing" />
 
+        <ImageView
+            android:id="@+id/sort"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/search_edit"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/sort_foreground" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/searching"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="别催了别催了，在搜了，自己网不行能怪谁..."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

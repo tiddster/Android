@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SearchingModel implements ResponseModel{
 
     @Override
-    public void GetSearching(ResponseListener responseListener, String language) {
+    public void GetSearching(ResponseListener responseListener, String language, String sort) {
         Retrofit mRetrofit;
         String token;
 
@@ -28,12 +28,12 @@ public class SearchingModel implements ResponseModel{
                 .baseUrl("https://api.github.com/search/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
-        token = "token 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";
+        token = "token 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";
 
         List<SearchingItems> list = new ArrayList<>();
 
         API api = mRetrofit.create(API.class);
-        api.GetRepository(language,token).subscribeOn(Schedulers.io())               //在IO线程进行网络请求
+        api.GetRepository(language,token,sort).subscribeOn(Schedulers.io())               //在IO线程进行网络请求
                 .observeOn(AndroidSchedulers.mainThread())  //回到主线程去处理请求结果
                 .subscribe(new Observer<Searching<SearchingItems>>() {
                     @Override

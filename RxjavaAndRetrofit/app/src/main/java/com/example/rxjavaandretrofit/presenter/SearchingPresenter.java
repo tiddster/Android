@@ -17,7 +17,7 @@ public class SearchingPresenter {
         this.mSearchingModel = new SearchingModel();
     }
 
-    public void GetSearchingInfo(String language){
+    public void GetSearchingInfo(String language, String sort){
         mSearchingModel.GetSearching(new ResponseListener() {
             @Override
             public void requestSuccess(List<SearchingItems> list) {
@@ -37,6 +37,6 @@ public class SearchingPresenter {
             public void requestFail() {
                 mSearchingView.ShowError();
             }
-        },language);
+        },language,sort);
     }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popupwindow"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/default_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="按匹配度排序"
+        android:textColor="#7A7A7A"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+
+    <Button
+        android:id="@+id/stars_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="按关注数排序"
+        android:textColor="#7A7A7A"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/forks_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="按分支数排序"
+        android:textColor="#7A7A7A"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/update_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="更新时间排序"
+        android:textColor="#7A7A7A"
+        android:textStyle="bold" />
+</LinearLayout>
