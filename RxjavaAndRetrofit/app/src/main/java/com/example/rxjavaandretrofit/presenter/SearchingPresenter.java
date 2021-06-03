@@ -21,7 +21,11 @@ public class SearchingPresenter {
         mSearchingModel.GetSearching(new ResponseListener() {
             @Override
             public void requestSuccess(List<SearchingItems> list) {
-                mSearchingView.ShowRepoInfo(list);
+                if(list.size() == 0){
+                    mSearchingView.ShowError();
+                } else {
+                    mSearchingView.ShowRepoInfo(list);
+                }
             }
 
             @Override

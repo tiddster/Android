@@ -1,13 +1,13 @@
 package com.example.rxjavaandretrofit.view;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rxjavaandretrofit.R;
 import com.example.rxjavaandretrofit.base.BaseFragment;
-import com.example.rxjavaandretrofit.bean.Searching;
 import com.example.rxjavaandretrofit.bean.SearchingItems;
 import com.example.rxjavaandretrofit.presenter.SearchingPresenter;
 
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchingSuccess extends BaseFragment implements SearchingView {
-    public TextView repo;
     public TextView searchTitle;
     public EditText search;
     public ImageView Mag;
@@ -96,6 +94,7 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
         private TextView repo_name, repo_des, repo_lang, fork_num, star_num,login_name,address;
         private int mPosition;
         private ConstraintLayout mConstraintLayout;
+        private ImageView avatar;
 
         public SearchHodler(@NonNull View itemView) {
             super(itemView);
@@ -107,6 +106,7 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
             star_num = itemView.findViewById(R.id.star_num);
             login_name = itemView.findViewById(R.id.login_name);
             address = itemView.findViewById(R.id.url);
+            avatar = itemView.findViewById(R.id.avatar);
 
             mConstraintLayout = itemView.findViewById(R.id.ItemLayout);
         }
@@ -120,8 +120,20 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
             star_num.setText(String.valueOf(searchingItems.getStargazers_count()));
             login_name.setText(searchingItems.getOwner().getLogin());
             address.setText(searchingItems.getGit_url());
+            /*
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mBitmap = getHttpBitmap(searchingItems.getOwner().getAvatar_url());
+                }
+            }).start();
 
+             */
+            show_details(searchingItems);
             //当false的时候，没有地址和简介
+        }
+
+        public void show_details(SearchingItems searchingItems){
             if(!searchingItems.isShow_details()){
                 address.setVisibility(View.GONE);
                 repo_des.setVisibility(View.GONE);
@@ -157,6 +169,10 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
         public void onBindViewHolder(@NonNull SearchHodler holder, int position) {
             SearchingItems searchingItems = mSearchingItemsList.get(position);
             holder.bind(searchingItems,position);
+            new LoadImage(holder.avatar).execute(searchingItems.getOwner().getAvatar_url());
+
+
+
             if(mOnItemClick != null) {
                 holder.mConstraintLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -164,14 +180,15 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
                         mOnItemClick.onItemClick();
                         if(!searchingItems.isShow_details()){
                             searchingItems.setShow_details(true);
-                            holder.bind(searchingItems,position);
+                            holder.show_details(searchingItems);
                         } else {
                             searchingItems.setShow_details(false);
-                            holder.bind(searchingItems,position);
+                            holder.show_details(searchingItems);
                         }
                     }
                 });
             }
+
         }
 
         @Override
@@ -189,6 +206,7 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
     @Override
     public void ShowRepoInfo(List<SearchingItems> list) {
         mItemsList = list;
+
         mAdapter = new SearchAdapter(mItemsList);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -201,13 +219,35 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
     }
 
     @Override
-    public void ShowRepoDetails() {
-
-    }
-
-    @Override
     public void ShowError() {
         Toast.makeText(getActivity(), "你搜了个寂寞", Toast.LENGTH_SHORT).show();
     }
+
+    /*
+    public static Bitmap getHttpBitmap(String url) {
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            Log.d("TAG", url);
+            myFileUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setConnectTimeout(0);
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+     */
+    
     //----------------------------------------------------------------------------------------------
 }
