@@ -1,12 +1,17 @@
 package com.example.rxjavaandretrofit.view;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,8 +31,15 @@ import com.example.rxjavaandretrofit.base.BaseFragment;
 import com.example.rxjavaandretrofit.bean.SearchingItems;
 import com.example.rxjavaandretrofit.presenter.SearchingPresenter;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.http.Url;
 
 public class SearchingSuccess extends BaseFragment implements SearchingView {
     public boolean searched = false;
@@ -80,6 +94,8 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
                 if (mRecyclerView.getChildCount() > 0 ) {
                     mRecyclerView.setAdapter(null);
                 }
+
+                closeKeyboard();
             }
         });
 
@@ -113,6 +129,15 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
             search.setVisibility(View.VISIBLE);
             searchTitle.setVisibility(View.INVISIBLE);
             sort.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    //自动关闭软键盘
+    private void closeKeyboard() {
+        View view = getActivity().getWindow().peekDecorView();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
     //----------------------------------------------------------------------------------------------
@@ -163,15 +188,15 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
         forks_sort = view.findViewById(R.id.forks_sort);
         update_sort = view.findViewById(R.id.update_sort);
 
-        ClickListener(default_sort,"default");
-        ClickListener(stars_sort,"stars");
-        ClickListener(forks_sort,"forks");
-        ClickListener(update_sort,"updated");
+        ClickListener(default_sort,"default",popupWindow);
+        ClickListener(stars_sort,"stars",popupWindow);
+        ClickListener(forks_sort,"forks",popupWindow);
+        ClickListener(update_sort,"updated",popupWindow);
 
         popupWindow.showAsDropDown(sort);
     }
 
-    public void ClickListener(Button button, String SORT){
+    public void ClickListener(Button button, String SORT,PopupWindow popupWindow){
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,7 +206,7 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
                 }
 
                 ToSearch(searchingText, SORT);
-
+                popupWindow.dismiss();
             }
         });
     }
@@ -245,6 +270,7 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
     }
 
     private class SearchAdapter extends RecyclerView.Adapter<SearchHodler>{
+        private static final String TAG = "HaveLoaded";
         private List<SearchingItems> mSearchingItemsList;
 
         private OnItemClick mOnItemClick;
@@ -265,12 +291,51 @@ public class SearchingSuccess extends BaseFragment implements SearchingView {
             return new SearchHodler(view);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onBindViewHolder(@NonNull SearchHodler holder, int position) {
             SearchingItems searchingItems = mSearchingItemsList.get(position);
             holder.bind(searchingItems,position);
 
-            new LoadImage(holder.avatar).execute(searchingItems.getOwner().getAvatar_url());
+            holder.avatar.setImageDrawable(getContext().getDrawable(R.mipmap.github));
+            final String url = searchingItems.getOwner().getAvatar_url();
+            new LoadImage(holder.avatar).execute(url);
+
+            //holder.avatar.setTag(url);
+            /*
+            AsyncTask asyncTask = new AsyncTask<Void, Void, Bitmap>() {
+                @Override
+                protected Bitmap doInBackground(Void... voids) {
+                    URL imageUrl = null;
+                    Bitmap bitmap = null;
+                    InputStream inputStream = null;
+                    try {
+                        imageUrl = new URL(url);
+                        HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+                        conn.setDoInput(true);
+                        conn.connect();
+                        inputStream = conn.getInputStream();
+                        bitmap = BitmapFactory.decodeStream(inputStream);
+                        inputStream.close();
+                        return bitmap;
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                    if(url.equals(holder.avatar.getTag())) {
+                        holder.avatar.setImageBitmap(bitmap);
+                    }
+                }
+            }.execute();
+
+             */
 
             if(mOnItemClick != null) {
                 holder.mConstraintLayout.setOnClickListener(new View.OnClickListener() {

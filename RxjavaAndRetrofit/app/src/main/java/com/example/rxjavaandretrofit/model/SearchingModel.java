@@ -28,7 +28,7 @@ public class SearchingModel implements ResponseModel{
                 .baseUrl("https://api.github.com/search/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
-        token = "token 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";
+        token = "token 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";
 
         List<SearchingItems> list = new ArrayList<>();
 

@@ -27,6 +27,7 @@ public class SearchingItems {
     private String description;
 
     private boolean show_details = false;
+    private String tag;
 
     public int getId() {
         return id;
@@ -121,4 +122,11 @@ public class SearchingItems {
         this.show_details = show_details;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 }
