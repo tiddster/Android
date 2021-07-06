@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import Doctor.DoctorActivity;
+import Patient.PatientActivity;
+
 public class LoginActivity extends AppCompatActivity {
 
     TextView exchangeButton;

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/p_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Tom"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/p_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:text="12345678"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/p_name"
+        app:layout_constraintStart_toEndOf="@+id/p_name"
+        app:layout_constraintTop_toTopOf="@+id/p_name" />
+
+    <TextView
+        android:id="@+id/p_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="男"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/p_name"
+        app:layout_constraintTop_toBottomOf="@+id/p_name" />
+
+    <TextView
+        android:id="@+id/p_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="年龄：78"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/p_sex"
+        app:layout_constraintStart_toEndOf="@+id/p_sex"
+        app:layout_constraintTop_toTopOf="@+id/p_sex" />
+
+    <TextView
+        android:id="@+id/p_blood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="血型：AB"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/p_age"
+        app:layout_constraintStart_toEndOf="@+id/p_age"
+        app:layout_constraintTop_toTopOf="@+id/p_age" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
