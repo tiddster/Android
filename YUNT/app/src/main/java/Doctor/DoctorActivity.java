@@ -3,6 +3,7 @@ package Doctor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import com.example.yunt.R;
 
 public class DoctorActivity extends AppCompatActivity {
     ImageView alarm, patient, person;
+    TextView Dtitle;
     int type = 2;
     Fragment mFragment;
 
@@ -30,6 +32,7 @@ public class DoctorActivity extends AppCompatActivity {
         alarm = findViewById(R.id.booking);
         patient = findViewById(R.id.d_patient_info);
         person = findViewById(R.id.d_self_info);
+        Dtitle = findViewById(R.id.Dtitle);
         setFragment();
     }
 
@@ -38,6 +41,7 @@ public class DoctorActivity extends AppCompatActivity {
         alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Dtitle.setText("预约日历");
                 alarm.setImageResource(R.drawable.clock2_foreground);
                 patient.setImageResource(R.drawable.patient_foreground);
                 person.setImageResource(R.drawable.person_foreground);
@@ -49,6 +53,7 @@ public class DoctorActivity extends AppCompatActivity {
         patient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Dtitle.setText("患者信息");
                 alarm.setImageResource(R.drawable.clock_foreground);
                 patient.setImageResource(R.drawable.patient2_foreground);
                 person.setImageResource(R.drawable.person_foreground);
@@ -60,6 +65,7 @@ public class DoctorActivity extends AppCompatActivity {
         person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Dtitle.setText("个人中心");
                 alarm.setImageResource(R.drawable.clock_foreground);
                 patient.setImageResource(R.drawable.patient_foreground);
                 person.setImageResource(R.drawable.person2_foreground);
