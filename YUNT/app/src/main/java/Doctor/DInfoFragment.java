@@ -1,9 +1,11 @@
 package Doctor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,33 +18,54 @@ import com.example.yunt.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Bean.PatientDataBase;
 import Bean.PatientInfo;
+import Bean.PatientInfoDao;
 
 public class DInfoFragment extends Fragment {
     public RecyclerView mRecyclerView;
     public PatientAdapter mPatientAdapter;
-    public List<PatientInfo> mPatientInfoList = new ArrayList<>();
+    public List<PatientInfo> mPatientInfoList;
+    Button mButton;
+    PatientInfoDao mPatientInfoDao;
+    PatientDataBase mPatientDataBase;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.d_patient_info_fragment,container,false);
         initView(view);
+        Listener();
         return view;
     }
 
     public void initView(View view) {
-        Create();
+        mPatientDataBase = PatientDataBase.getBasicInstance(getActivity());
+        mPatientInfoDao = mPatientDataBase.getPatientInfoDao();
+
         mRecyclerView = view.findViewById(R.id.d_patient_recycleView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Create();
+
         mPatientAdapter = new PatientAdapter(mPatientInfoList);
         mRecyclerView.setAdapter(mPatientAdapter);
+
+        mButton = view.findViewById(R.id.newPatient);
     }
 
     public void Create(){
-        for(int i=0; i<10; i++){
-            PatientInfo patientInfo = new PatientInfo("xxx",i,"xx",i+60,"A");
-            mPatientInfoList.add(patientInfo);
-        }
+        mPatientInfoList = mPatientInfoDao.getList();
+    }
+
+    public void Listener(){
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),DInsertNewPatientActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private class PatientHolder extends RecyclerView.ViewHolder{
@@ -88,7 +111,7 @@ public class DInfoFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mPatientInfoList.size();
+            return mPatientInfoList==null?0:mPatientInfoList.size();
         }
     }
 }

@@ -1,29 +1,44 @@
 package Bean;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.List;
 
-//缺时间
+@Entity
 public class PatientInfo {
+    @ColumnInfo(name = "name")
     public String name;
+
+    @PrimaryKey(autoGenerate = true)
     public int number;
+
+    @ColumnInfo(name = "sex")
     public String sex;
+
+    @ColumnInfo(name = "age")
     public int age;
+
+    @ColumnInfo(name = "blood")
     public String blood;
+
+    @ColumnInfo(name = "password")
     public String password;
+    /*
     public String book_month;
     public String book_day;
     public int Hours;
     public int circumstance;   //0:未预约  1：已预约，未查看   2：已预约，已查看
+     */
+    /*
+    @ColumnInfo(name = "BloodList")
     public List<PatientBloodInfo> mPatientBloodInfoList;
 
-    public PatientInfo(String name, int number, String sex, int age, String blood, List<PatientBloodInfo> patientBloodInfoList) {
-        this.name = name;
-        this.number = number;
-        this.sex = sex;
-        this.age = age;
-        this.blood = blood;
-        mPatientBloodInfoList = patientBloodInfoList;
-    }
+    @ColumnInfo(name = "DateList")
+    public List<PatientBookDate> mPatientBookDateList;
+
+     */
 
     public PatientInfo(String name, int number, String sex, int age, String blood) {
         this.name = name;
@@ -80,6 +95,7 @@ public class PatientInfo {
     public void setPassword(String password) {
         this.password = password;
     }
+    /*
 
     public String getBook_month() {
         return book_month;
@@ -113,6 +129,9 @@ public class PatientInfo {
         this.circumstance = circumstance;
     }
 
+     */
+
+    /*
     public List<PatientBloodInfo> getPatientBloodInfoList() {
         return mPatientBloodInfoList;
     }
@@ -120,4 +139,13 @@ public class PatientInfo {
     public void setPatientBloodInfoList(List<PatientBloodInfo> patientBloodInfoList) {
         mPatientBloodInfoList = patientBloodInfoList;
     }
+
+    public List<PatientBookDate> getPatientBookDateList() {
+        return mPatientBookDateList;
+    }
+
+    public void setPatientBookDateList(List<PatientBookDate> patientBookDateList) {
+        mPatientBookDateList = patientBookDateList;
+    }
+     */
 }

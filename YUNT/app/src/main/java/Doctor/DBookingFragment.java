@@ -43,9 +43,12 @@ public class DBookingFragment extends Fragment {
     public void Create(){
         for(int i=0; i<5; i++){
             PatientInfo patientInfo = new PatientInfo("ABC",i,"男",i+70,"AB");
+            /*
             patientInfo.setCircumstance(i%3);
             patientInfo.setHours(9+i);
+            */
             mPatientInfoList.add(patientInfo);
+
         }
     }
 
@@ -63,11 +66,15 @@ public class DBookingFragment extends Fragment {
         public  void bind(PatientInfo patientInfo, int position){
             bookedName.setText(patientInfo.getName());
             bookedId.setText(String.valueOf(patientInfo.getNumber()));
+            /*
             bookedHours.setText(String.valueOf(patientInfo.getHours())+":00");
             if(patientInfo.getCircumstance() == 1)
                 bookedCircum.setText("待确认");
-            else if(patientInfo.getCircumstance() == 2)
+            else if(patientInfo.getCircumstance() == 2) {
                 bookedCircum.setText("已确认");
+                bookedName.setText("*"+patientInfo.getName());
+            }
+             */
         }
     }
 
