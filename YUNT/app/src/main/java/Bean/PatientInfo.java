@@ -23,7 +23,7 @@ public class PatientInfo {
     @ColumnInfo(name = "blood")
     public String blood;
 
-    @ColumnInfo(name = "password")
+    @ColumnInfo(name = "P_password")
     public String password;
     /*
     public String book_month;

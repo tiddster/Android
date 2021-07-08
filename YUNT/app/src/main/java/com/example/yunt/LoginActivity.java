@@ -7,13 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import Doctor.DoctorActivity;
 import Patient.PatientActivity;
 
 public class LoginActivity extends AppCompatActivity {
-
     TextView exchangeButton;
     Button loginButton;
     int type = 0;
@@ -55,9 +55,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (type == 0) {
                     Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     Intent intent = new Intent(LoginActivity.this, DoctorActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Update;
 
 import com.example.yunt.R;
 
@@ -46,16 +47,15 @@ public class DInfoFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.d_patient_recycleView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        Create();
-
-        mPatientAdapter = new PatientAdapter(mPatientInfoList);
-        mRecyclerView.setAdapter(mPatientAdapter);
+        UpdateUI();
 
         mButton = view.findViewById(R.id.newPatient);
     }
 
-    public void Create(){
+    public void UpdateUI(){
         mPatientInfoList = mPatientInfoDao.getList();
+        mPatientAdapter = new PatientAdapter(mPatientInfoList);
+        mRecyclerView.setAdapter(mPatientAdapter);
     }
 
     public void Listener(){
@@ -113,5 +113,15 @@ public class DInfoFragment extends Fragment {
         public int getItemCount() {
             return mPatientInfoList==null?0:mPatientInfoList.size();
         }
+    }
+
+    private boolean isFirstLoading = true;
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isFirstLoading) {
+            UpdateUI();
+        }
+        isFirstLoading = false;
     }
 }
