@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:elevation="10dp"
+    android:background="@drawable/shape0">
 
     <TextView
         android:id="@+id/bookedName"
@@ -63,16 +68,4 @@
         app:layout_constraintEnd_toEndOf="@+id/bookedId"
         app:layout_constraintTop_toTopOf="@+id/bookedTime" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1px"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"></View>
 </androidx.constraintlayout.widget.ConstraintLayout>

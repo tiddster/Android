@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Update;
 
 import com.example.yunt.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DInfoFragment extends Fragment {
     public RecyclerView mRecyclerView;
     public PatientAdapter mPatientAdapter;
     public List<PatientInfo> mPatientInfoList;
-    Button mButton;
+    FloatingActionButton mButton;
     PatientInfoDao mPatientInfoDao;
     PatientDataBase mPatientDataBase;
 

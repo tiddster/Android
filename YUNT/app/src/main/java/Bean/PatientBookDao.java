@@ -10,11 +10,11 @@ import java.util.List;
 @Dao
 public interface PatientBookDao {
     @Insert
-    void InsertDate(PatientBookDate... patientBookDates);
+    void InsertDate(PatientBook... patientBooks);
 
     @Delete
-    void DeleteDate(PatientBookDate... patientBookDates);
+    void DeleteDate(PatientBook... patientBooks);
 
-    @Query("SELECT * FROM PatientBookDate ORDER BY id")
-    List<PatientBookDate> getDateList();
+    @Query("SELECT * FROM PatientBook ORDER BY id")
+    List<PatientBook> getDateList();
 }

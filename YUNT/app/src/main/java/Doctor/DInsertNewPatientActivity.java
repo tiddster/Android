@@ -68,6 +68,7 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
     }
 
     public void Listener(){
+        mRadioGroup.check(maleButton.getId());
 
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -102,6 +103,7 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
 
     public void Insert(){
         PatientInfo patientInfo = new PatientInfo(editName.getText().toString(),id,sex,Integer.parseInt(editAge.getText().toString()),editBlood.getText().toString());
+        patientInfo.setPassword("123456");
         mPatientInfoDao.InsertPatient(patientInfo);
     }
 
