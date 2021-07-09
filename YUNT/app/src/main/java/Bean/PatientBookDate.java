@@ -19,7 +19,7 @@ public class PatientBookDate {
     public int Hours;
 
     @ColumnInfo(name = "circumstances")
-    public int circumstance;   //0:未预约  1：已预约，未查看   2：已预约，已查看
+    public int circumstance;   //0:未预约  1：已预约，未查看   2：已预约，已查看  3：已完成
 
     public PatientBookDate(String book_month, String book_day, int Hours, int circumstance) {
         this.book_month = book_month;
