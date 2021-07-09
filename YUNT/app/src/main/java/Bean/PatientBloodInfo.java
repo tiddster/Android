@@ -1,19 +1,23 @@
 package Bean;
 
 public class PatientBloodInfo {
+    public int id;
     public float BWeight;
     public float AWeight;
     public float ABloodP;
     public float BBloodP;
-    public int interval;
+    public int next_month;
+    public int next_day;
     public float CR;
 
-    public PatientBloodInfo(float BWeight, float AWeight, float ABloodP, float BBloodP, int interval, float CR) {
+    public PatientBloodInfo(int id, float BWeight, float AWeight, float ABloodP, float BBloodP, int interval, float CR,int next_month,int next_day) {
+        this.id = id;
         this.BWeight = BWeight;
         this.AWeight = AWeight;
         this.ABloodP = ABloodP;
         this.BBloodP = BBloodP;
-        this.interval = interval;
+        this.next_day = next_day;
+        this.next_month = next_month;
         this.CR = CR;
     }
 
@@ -49,12 +53,20 @@ public class PatientBloodInfo {
         this.BBloodP = BBloodP;
     }
 
-    public int getInterval() {
-        return interval;
+    public int getNext_month() {
+        return next_month;
     }
 
-    public void setInterval(int interval) {
-        this.interval = interval;
+    public void setNext_month(int next_month) {
+        this.next_month = next_month;
+    }
+
+    public int getNext_day() {
+        return next_day;
+    }
+
+    public void setNext_day(int next_day) {
+        this.next_day = next_day;
     }
 
     public float getCR() {
@@ -63,5 +75,13 @@ public class PatientBloodInfo {
 
     public void setCR(float CR) {
         this.CR = CR;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

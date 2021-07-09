@@ -18,7 +18,7 @@ public class DPersonalInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.personal_info_fragment,container,false);
+        View view = inflater.inflate(R.layout.d_personal_info_fragment,container,false);
         initView(view);
         Listener();
         return view;
