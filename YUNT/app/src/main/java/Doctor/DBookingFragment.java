@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,12 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 
+import Bean.PatientBook;
+import Bean.PatientBookDao;
+import Bean.PatientDataBase;
 import Bean.PatientInfo;
 
 public class DBookingFragment extends Fragment {
-    public List<PatientInfo> mPatientInfoList = new ArrayList<>();
+    public List<PatientBook> mPatientBookList = new ArrayList<>();
     public RecyclerView mRecyclerView;
     public BookAdapter mAdapter;
+    private PatientDataBase mPatientDataBase;
+    private PatientBookDao mPatientBookDao;
+    CalendarView mCalendarView;
+    int day,month,hour;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,25 +41,29 @@ public class DBookingFragment extends Fragment {
     }
 
     public void initView(View view){
-        Create();
+        mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
+        mPatientBookDao = mPatientDataBase.getDateDao();
+
+
+
         mRecyclerView = view.findViewById(R.id.bookRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+        CreateList();
+
+        mCalendarView = view.findViewById(R.id.calendarView);
+        /*
         mAdapter = new BookAdapter(mPatientInfoList);
         mRecyclerView.setAdapter(mAdapter);
+         */
     }
 
-    public void Create(){
-        for(int i=0; i<5; i++){
-            PatientInfo patientInfo = new PatientInfo("ABC",i,"男",i+70,"AB");
-            /*
-            patientInfo.setCircumstance(i%3);
-            patientInfo.setHours(9+i);
-            */
-            mPatientInfoList.add(patientInfo);
-
-        }
+    public void CreateList(){
+        mPatientBookList = mPatientBookDao.getDateList();
+        mAdapter = new BookAdapter(mPatientBookList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private class BookHolder extends RecyclerView.ViewHolder{
@@ -64,9 +76,10 @@ public class DBookingFragment extends Fragment {
             bookedHours = itemView.findViewById(R.id.bookedTime);
         }
 
-        public  void bind(PatientInfo patientInfo, int position){
-            bookedName.setText(patientInfo.getName());
-            bookedId.setText(String.valueOf(patientInfo.getNumber()));
+        public  void bind(PatientBook patientBook, int position){
+            bookedName.setText(patientBook.getName());
+            bookedId.setText(String.valueOf(patientBook.getId()));
+            bookedHours.setText(String.valueOf(patientBook.getHours())+"时");
             /*
             bookedHours.setText(String.valueOf(patientInfo.getHours())+":00");
             if(patientInfo.getCircumstance() == 1)
@@ -80,9 +93,9 @@ public class DBookingFragment extends Fragment {
     }
 
     private class BookAdapter extends  RecyclerView.Adapter<BookHolder>{
-        private List<PatientInfo> mPatientInfoList;
-        public BookAdapter(List<PatientInfo> list){
-            mPatientInfoList = list;
+        private List<PatientBook> mPatientBookList;
+        public BookAdapter(List<PatientBook> list){
+            mPatientBookList = list;
         }
 
         @NonNull
@@ -95,13 +108,13 @@ public class DBookingFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BookHolder holder, int position) {
-            PatientInfo patientInfo = mPatientInfoList.get(position);
-            holder.bind(patientInfo,position);
+            PatientBook patientBook = mPatientBookList.get(position);
+            holder.bind(patientBook,position);
         }
 
         @Override
         public int getItemCount() {
-            return mPatientInfoList.size();
+            return mPatientBookList.size();
         }
     }
 }

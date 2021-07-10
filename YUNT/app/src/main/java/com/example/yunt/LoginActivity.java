@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     int type = 0;
     public PatientDataBase mPatientDataBase;
     public PatientInfoDao mPatientInfoDao;
-    public static int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +70,20 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (type == 0) {
                     if(PatientLogIn()) {
-                        SharedPreferences sp = getSharedPreferences("getID",0);
+                        SharedPreferences sp = getSharedPreferences("GET",0);
                         SharedPreferences.Editor editor = sp.edit();
 
-                        editor.putInt("ID",mPatientInfoDao.getIdByName(account.getText().toString()));
-                        editor.commit();
+                        char s = account.getText().toString().charAt(0);
+                        if(s >= '0'&& s<='9') {
+                            int Account = Integer.parseInt(account.getText().toString());
+                            editor.putInt("ID", Account);
+                            editor.putString("NAME", mPatientInfoDao.getById(Account).getName());
+                            editor.commit();
+                        } else {
+                            editor.putInt("ID", mPatientInfoDao.getByName(account.getText().toString()).getNumber());
+                            editor.putString("NAME", account.getText().toString());
+                            editor.commit();
+                        }
 
                         Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
                         startActivity(intent);

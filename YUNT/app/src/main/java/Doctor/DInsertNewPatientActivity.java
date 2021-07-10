@@ -69,6 +69,7 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
 
     public void Listener(){
         mRadioGroup.check(maleButton.getId());
+        sex = "男";
 
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

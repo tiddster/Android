@@ -25,6 +25,7 @@ public class PBookFragment extends Fragment {
     ImageButton bookingButton;
     boolean isBook = false;
     public static int id;
+    public static String name;
     private PatientBook mPatientBook;
     private PatientDataBase mPatientDataBase;
     private PatientBookDao mPatientBookDao;
@@ -39,8 +40,11 @@ public class PBookFragment extends Fragment {
     }
 
     public void initView(View view){
-        SharedPreferences sp = getActivity().getSharedPreferences("getId",0);
+        SharedPreferences sp = getActivity().getSharedPreferences("GET",0);
         id = sp.getInt("ID",0);
+        name = sp.getString("NAME", null);
+
+        Toast.makeText(getActivity(),"你好哇！ "+ name +" "+id,Toast.LENGTH_SHORT).show();
 
         mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
         mPatientBookDao = mPatientDataBase.getDateDao();
@@ -51,13 +55,15 @@ public class PBookFragment extends Fragment {
         editMonth = view.findViewById(R.id.booking_month);
 
         for(PatientBook patientBook : mPatientBookDao.getDateList()){
-            if(id == patientBook.getId() && patientBook.getCircumstance() == 1){
+            if(id == patientBook.getId() && patientBook.getCircumstance() == 1 && name.equals(patientBook.getName())){
                 mPatientBook = patientBook;
+
                 isBook = true;
                 bookingButton.setImageResource(R.drawable.clockok_foreground);
                 editMonth.setText(patientBook.book_month);
                 editDay.setText(patientBook.book_day);
                 editTime.setText(String.valueOf(patientBook.Hours));
+
                 break;
             }
         }
@@ -96,7 +102,7 @@ public class PBookFragment extends Fragment {
     }
 
     public void InsertNewBooking(){
-        mPatientBook = new PatientBook(id,editMonth.getText().toString(),editDay.getText().toString(),Integer.parseInt(editTime.getText().toString()),1);
+        mPatientBook = new PatientBook(name,id,editMonth.getText().toString(),editDay.getText().toString(),Integer.parseInt(editTime.getText().toString()),1);
         mPatientBookDao.InsertDate(mPatientBook);
     }
 
