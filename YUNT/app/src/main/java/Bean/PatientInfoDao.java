@@ -17,4 +17,7 @@ public interface PatientInfoDao {
 
     @Query("SELECT * FROM patientinfo ORDER BY number")
     List<PatientInfo> getList();
+
+    @Query("SELECT * FROM patientinfo WHERE name IN(:name)")
+    int getIdByName(String name);
 }

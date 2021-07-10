@@ -3,6 +3,7 @@ package com.example.yunt;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     int type = 0;
     public PatientDataBase mPatientDataBase;
     public PatientInfoDao mPatientInfoDao;
+    public static int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (type == 0) {
                     if(PatientLogIn()) {
+                        SharedPreferences sp = getSharedPreferences("getID",0);
+                        SharedPreferences.Editor editor = sp.edit();
+
+                        editor.putInt("ID",mPatientInfoDao.getIdByName(account.getText().toString()));
+                        editor.commit();
+
                         Intent intent = new Intent(LoginActivity.this, PatientActivity.class);
                         startActivity(intent);
                         finish();
@@ -88,7 +96,9 @@ public class LoginActivity extends AppCompatActivity {
         boolean isLogIn = false;
         List<PatientInfo> patientInfoList = mPatientInfoDao.getList();
         for(PatientInfo patientInfo : patientInfoList){
-            if(account.getText().toString().equals(String.valueOf(patientInfo.getNumber())) && password.getText().toString().equals(patientInfo.getPassword()))
+            if(( account.getText().toString().equals(patientInfo.getName())
+                    ||account.getText().toString().equals(String.valueOf(patientInfo.getNumber())) )
+                    && password.getText().toString().equals(patientInfo.getPassword()))
                 isLogIn = true;
         }
         return isLogIn;

@@ -4,41 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EBFCF5">
-
-    <ImageView
-        android:id="@+id/booking_button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="180dp"
-        android:layout_marginBottom="180dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/clock_foreground" />
+    android:background="#F5F5F5">
 
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:text="距离下次透析还剩5天"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/booking_button"
+        app:layout_constraintBottom_toTopOf="@+id/bookingButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="1.0" />
 
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/booking_button"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/bookingButton"
+        app:layout_constraintVertical_bias="0.06999999">
 
         <TextView
             android:id="@+id/textView13"
@@ -49,11 +41,68 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/booking_time"
-            android:layout_width="100dp"
+            android:id="@+id/booking_month"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:digits="0123456789"
+            android:gravity="center"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="月"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/booking_day"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="0123456789"
+            android:gravity="center"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="日"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/booking_hours"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:digits="0123456789"
+            android:gravity="center"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="时"
+            android:textSize="24sp" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/bookingButton"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@drawable/circle"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/clock_foreground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

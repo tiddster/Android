@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(version = 2, entities = {PatientInfo.class, PatientBook.class,DoctorAccount.class}, exportSchema = false)
+@Database(version = 1, entities = {PatientInfo.class, PatientBook.class,DoctorAccount.class}, exportSchema = false)
 public abstract class PatientDataBase extends RoomDatabase {
     //用户基本信息数据库
     public static PatientDataBase BasicINSTANCE;

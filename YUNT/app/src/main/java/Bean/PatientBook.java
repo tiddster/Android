@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey;
 @Entity
 public class PatientBook {
     @PrimaryKey(autoGenerate = true)
+    public int booking_number;
+
+    @ColumnInfo(name = "id")
     public int id;
 
     @ColumnInfo(name = "bookMonth")
@@ -19,9 +22,10 @@ public class PatientBook {
     public int Hours;
 
     @ColumnInfo(name = "circumstances")
-    public int circumstance;   //0:未预约  1：已预约，未查看   2：已预约，已查看  3：已完成
+    public int circumstance;   //0:未预约  1：已预约，未完成  2：已完成
 
-    public PatientBook(String book_month, String book_day, int Hours, int circumstance) {
+    public PatientBook(int id,String book_month, String book_day, int Hours, int circumstance) {
+        this.id = id;
         this.book_month = book_month;
         this.book_day = book_day;
         this.Hours = Hours;
@@ -58,5 +62,13 @@ public class PatientBook {
 
     public void setCircumstance(int circumstance) {
         this.circumstance = circumstance;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -35,7 +35,9 @@ public class DBookingFragment extends Fragment {
     public void initView(View view){
         Create();
         mRecyclerView = view.findViewById(R.id.bookRecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         mAdapter = new BookAdapter(mPatientInfoList);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -60,7 +62,6 @@ public class DBookingFragment extends Fragment {
             bookedName = itemView.findViewById(R.id.bookedName);
             bookedId = itemView.findViewById(R.id.bookedId);
             bookedHours = itemView.findViewById(R.id.bookedTime);
-            bookedCircum = itemView.findViewById(R.id.bookedCircum);
         }
 
         public  void bind(PatientInfo patientInfo, int position){

@@ -29,7 +29,7 @@ public class PatientInfo {
     public String book_month;
     public String book_day;
     public int Hours;
-    public int circumstance;   //0:未预约  1：已预约，未查看   2：已预约，已查看
+    public int circumstance;   //0:未预约  1：已预约，未查看   2：已预约，已查看  3:已取消
      */
     /*
     @ColumnInfo(name = "BloodList")
