@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yunt.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 
@@ -29,8 +30,9 @@ public class DBookingFragment extends Fragment {
     public BookAdapter mAdapter;
     private PatientDataBase mPatientDataBase;
     private PatientBookDao mPatientBookDao;
+    Calendar mCalendar = Calendar.getInstance();
     CalendarView mCalendarView;
-    int day,month,hour;
+    int Day,Month,hour;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +46,8 @@ public class DBookingFragment extends Fragment {
         mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
         mPatientBookDao = mPatientDataBase.getDateDao();
 
-
+        Month = mCalendar.get(Calendar.MONTH)+1;
+        Day = mCalendar.get(Calendar.DATE);
 
         mRecyclerView = view.findViewById(R.id.bookRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -54,6 +57,14 @@ public class DBookingFragment extends Fragment {
         CreateList();
 
         mCalendarView = view.findViewById(R.id.calendarView);
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Month = month + 1;
+                Day = dayOfMonth;
+                CreateList();
+            }
+        });
         /*
         mAdapter = new BookAdapter(mPatientInfoList);
         mRecyclerView.setAdapter(mAdapter);
@@ -61,9 +72,21 @@ public class DBookingFragment extends Fragment {
     }
 
     public void CreateList(){
-        mPatientBookList = mPatientBookDao.getDateList();
+        mPatientBookList = JudgeBookingList(Day,Month);
         mAdapter = new BookAdapter(mPatientBookList);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public List<PatientBook> JudgeBookingList(int day, int month){
+        List<PatientBook> patientBookList = new ArrayList<>();
+        Day = day;
+        Month = month;
+        for(PatientBook patientBook : mPatientBookDao.getDateList()){
+            if(patientBook.getBook_month().equals(String.valueOf(Month)) && patientBook.getBook_day().equals(String.valueOf(Day))){
+                patientBookList.add(patientBook);
+            }
+        }
+        return patientBookList;
     }
 
     private class BookHolder extends RecyclerView.ViewHolder{

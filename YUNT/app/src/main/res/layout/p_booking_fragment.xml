@@ -33,62 +33,11 @@
         app:layout_constraintVertical_bias="0.06999999">
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/bookReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="预约时间："
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/booking_month"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:digits="0123456789"
-            android:gravity="center"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="月"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/booking_day"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:digits="0123456789"
-            android:gravity="center"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="日"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/booking_hours"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:digits="0123456789"
-            android:gravity="center"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="时"
+            android:text="您目前未有预约申请"
             android:textSize="24sp" />
 
     </LinearLayout>
