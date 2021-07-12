@@ -1,6 +1,7 @@
 package com.example.yunt;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,8 +23,9 @@ import Patient.PatientActivity;
 
 public class LoginActivity extends AppCompatActivity {
     EditText account,password;
-    TextView exchangeButton;
-    Button loginButton;
+    TextView exchangeButton,Title;
+    TextView loginButton;
+    ConstraintLayout mConstraintLayout;
     int type = 0;
     public PatientDataBase mPatientDataBase;
     public PatientInfoDao mPatientInfoDao;
@@ -43,9 +45,10 @@ public class LoginActivity extends AppCompatActivity {
 
         exchangeButton = findViewById(R.id.exchange);
         loginButton = findViewById(R.id.login_button);
-
+        mConstraintLayout = findViewById(R.id.login_part);
         password = findViewById(R.id.Password);
         account = findViewById(R.id.Account);
+        Title = findViewById(R.id.title);
     }
 
     public void Listener() {
@@ -54,12 +57,18 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (type == 0) {
                     type = 1;
-                    loginButton.setBackgroundColor(Color.parseColor("#2196F3"));
+                    mConstraintLayout.setBackgroundResource(R.drawable.gradient1);
+                    loginButton.setBackgroundResource(R.drawable.shape_login);
+                    Title.setTextColor(Color.parseColor("#87B8FD"));
+                    loginButton.setTextColor(Color.parseColor("#87B8FD"));
                     loginButton.setText("医生登录");
                 }
                 else {
                     type = 0;
-                    loginButton.setBackgroundColor(Color.parseColor("#4CAF50"));
+                    mConstraintLayout.setBackgroundResource(R.drawable.gradient2);
+                    loginButton.setBackgroundResource(R.drawable.shape_login_2);
+                    Title.setTextColor(Color.parseColor("#01BAA7"));
+                    loginButton.setTextColor(Color.parseColor("#01BAA7"));
                     loginButton.setText("患者登录");
                 }
             }
