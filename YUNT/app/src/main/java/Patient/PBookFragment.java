@@ -35,6 +35,7 @@ public class PBookFragment extends Fragment {
     boolean isBook = false;
     public static int id;
     public static String name;
+    public static int age;
     private PatientBook mPatientBook;
     private PatientDataBase mPatientDataBase;
     private PatientBookDao mPatientBookDao;
@@ -54,6 +55,7 @@ public class PBookFragment extends Fragment {
         SharedPreferences sp = getActivity().getSharedPreferences("GET", 0);
         id = sp.getInt("ID", 0);
         name = sp.getString("NAME", null);
+        age = sp.getInt("AGE",0);
 
         mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
         mPatientBookDao = mPatientDataBase.getDateDao();
@@ -208,7 +210,7 @@ public class PBookFragment extends Fragment {
     }
 
     public void InsertNewBooking() {
-        mPatientBook = new PatientBook(name, id, String.valueOf(Month), String.valueOf(Day), Hour, 1);
+        mPatientBook = new PatientBook(name, id, String.valueOf(Month), String.valueOf(Day), Hour, 1,age);
         mPatientBookDao.InsertDate(mPatientBook);
     }
 

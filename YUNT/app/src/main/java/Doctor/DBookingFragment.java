@@ -1,6 +1,7 @@
 
 package Doctor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +59,12 @@ public class DBookingFragment extends Fragment {
 
         CreateList();
 
+        mAdapter.setOnItemClick(new OnItemClick() {
+            @Override
+            public void onItemClick() {
+            }
+        });
+
         mCalendarView = view.findViewById(R.id.calendarView);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -92,18 +100,25 @@ public class DBookingFragment extends Fragment {
 
     private class BookHolder extends RecyclerView.ViewHolder{
         private TextView bookedName,bookedId,bookedHours,bookedCircum;
+        private ConstraintLayout bookItem;
 
         public BookHolder(@NonNull View itemView) {
             super(itemView);
             bookedName = itemView.findViewById(R.id.bookedName);
             bookedId = itemView.findViewById(R.id.bookedId);
             bookedHours = itemView.findViewById(R.id.bookedTime);
+            bookItem = itemView.findViewById(R.id.book_item);
         }
 
         public  void bind(PatientBook patientBook, int position){
             bookedName.setText(patientBook.getName());
             bookedId.setText(String.valueOf(patientBook.getId()));
             bookedHours.setText(String.valueOf(patientBook.getHours())+"时");
+            int Circum = patientBook.getCircumstance();
+            if(Circum == 2){
+                bookItem.setBackgroundResource(R.drawable.shape_gratient_item2);
+                bookItem.setClickable(false);
+            }
             /*
             bookedHours.setText(String.valueOf(patientInfo.getHours())+":00");
             if(patientInfo.getCircumstance() == 1)
@@ -118,6 +133,13 @@ public class DBookingFragment extends Fragment {
 
     private class BookAdapter extends  RecyclerView.Adapter<BookHolder>{
         private List<PatientBook> mPatientBookList;
+
+        private OnItemClick mOnItemClick;
+
+        public void setOnItemClick(OnItemClick onItemClick){
+            mOnItemClick = onItemClick;
+        }
+
         public BookAdapter(List<PatientBook> list){
             mPatientBookList = list;
         }
@@ -134,11 +156,32 @@ public class DBookingFragment extends Fragment {
         public void onBindViewHolder(@NonNull BookHolder holder, int position) {
             PatientBook patientBook = mPatientBookList.get(position);
             holder.bind(patientBook,position);
+            holder.bookItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClick.onItemClick();
+                    Intent intent = new Intent(getActivity(),DInsertNewBloodActivity.class);
+                    intent.putExtra("ID", patientBook.getId());
+                    intent.putExtra("NAME",patientBook.getName());
+                    intent.putExtra("AGE",patientBook.getAge());
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return mPatientBookList.size();
         }
+    }
+
+    private boolean isFirstLoading = true;
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isFirstLoading) {
+            CreateList();
+        }
+        isFirstLoading = false;
     }
 }

@@ -12,6 +12,9 @@ public class PatientBook {
     @ColumnInfo(name = "id")
     public int id;
 
+    @ColumnInfo(name = "age")
+    public int age;
+
     @ColumnInfo(name = "name")
     public String name;
 
@@ -27,13 +30,14 @@ public class PatientBook {
     @ColumnInfo(name = "circumstances")
     public int circumstance;   //0:未预约  1：已预约，未完成  2：已完成
 
-    public PatientBook(String name , int id,String book_month, String book_day, int Hours, int circumstance) {
+    public PatientBook(String name , int id,String book_month, String book_day, int Hours, int circumstance, int age) {
         this.id = id;
         this.book_month = book_month;
         this.book_day = book_day;
         this.Hours = Hours;
         this.circumstance = circumstance;
         this.name = name;
+        this.age = age;
     }
 
     public String getBook_month() {
@@ -82,5 +86,21 @@ public class PatientBook {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getBooking_number() {
+        return booking_number;
+    }
+
+    public void setBooking_number(int booking_number) {
+        this.booking_number = booking_number;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

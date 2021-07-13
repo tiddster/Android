@@ -25,6 +25,7 @@ public class PatientInfo {
 
     @ColumnInfo(name = "P_password")
     public String password;
+
     /*
     public String book_month;
     public String book_day;

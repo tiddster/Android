@@ -1,16 +1,32 @@
 package Bean;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class PatientBlood {
+    @PrimaryKey(autoGenerate = true)
+    public int blood_id;
+
+    @ColumnInfo(name = "id")
     public int id;
+    @ColumnInfo(name = "BWeight")
     public float BWeight;
+    @ColumnInfo(name = "AWeight")
     public float AWeight;
+    @ColumnInfo(name = "ABloodP")
     public float ABloodP;
+    @ColumnInfo(name = "BBloodP")
     public float BBloodP;
+    @ColumnInfo(name = "next_month")
     public int next_month;
+    @ColumnInfo(name = "next_day")
     public int next_day;
+    @ColumnInfo(name = "CR")
     public float CR;
 
-    public PatientBlood(int id, float BWeight, float AWeight, float ABloodP, float BBloodP, int interval, float CR, int next_month, int next_day) {
+    public PatientBlood(int id, float BWeight, float AWeight, float ABloodP, float BBloodP, float CR, int next_month, int next_day) {
         this.id = id;
         this.BWeight = BWeight;
         this.AWeight = AWeight;
@@ -83,5 +99,13 @@ public class PatientBlood {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getBlood_id() {
+        return blood_id;
+    }
+
+    public void setBlood_id(int blood_id) {
+        this.blood_id = blood_id;
     }
 }

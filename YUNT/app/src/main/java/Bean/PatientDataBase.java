@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(version = 1, entities = {PatientInfo.class, PatientBook.class,DoctorAccount.class}, exportSchema = false)
+@Database(version = 1, entities = {PatientInfo.class, PatientBook.class,DoctorAccount.class,PatientBlood.class}, exportSchema = false)
 public abstract class PatientDataBase extends RoomDatabase {
     //用户基本信息数据库
     public static PatientDataBase BasicINSTANCE;
@@ -43,4 +43,17 @@ public abstract class PatientDataBase extends RoomDatabase {
         return DAINSTANCE;
     }
     public abstract DoctorAccountDao getDADao();
+
+    //透析情况数据库
+
+    public static PatientDataBase BLOODINSTANCE;
+    public static synchronized PatientDataBase getBLOODInstance(Context context){
+        if(BLOODINSTANCE == null){
+            BLOODINSTANCE = Room.databaseBuilder(context.getApplicationContext(),PatientDataBase.class,"BloodDataBase")
+                    .allowMainThreadQueries()
+                    .build();
+        }
+        return BLOODINSTANCE;
+    }
+    public abstract PatientBloodDao getPatientBloodDao();
 }

@@ -87,10 +87,12 @@ public class LoginActivity extends AppCompatActivity {
                             int Account = Integer.parseInt(account.getText().toString());
                             editor.putInt("ID", Account);
                             editor.putString("NAME", mPatientInfoDao.getById(Account).getName());
+                            editor.putInt("AGE",mPatientInfoDao.getById(Account).getAge());
                             editor.commit();
                         } else {
                             editor.putInt("ID", mPatientInfoDao.getByName(account.getText().toString()).getNumber());
                             editor.putString("NAME", account.getText().toString());
+                            editor.putInt("AGE",mPatientInfoDao.getByName(account.getText().toString()).getAge());
                             editor.commit();
                         }
 

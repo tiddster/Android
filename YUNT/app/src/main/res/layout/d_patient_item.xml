@@ -103,6 +103,8 @@
         android:text="AB"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/p_blood_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/p_blood_text"
         app:layout_constraintTop_toTopOf="@+id/p_blood_text" />
 
