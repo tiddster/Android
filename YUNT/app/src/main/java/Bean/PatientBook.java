@@ -9,6 +9,12 @@ public class PatientBook {
     @PrimaryKey(autoGenerate = true)
     public int booking_number;
 
+    @ColumnInfo(name = "p_book_doctor")
+    public String doctorName;
+
+    @ColumnInfo(name = "p_book_hospital")
+    public String hospital;
+
     @ColumnInfo(name = "id")
     public int id;
 

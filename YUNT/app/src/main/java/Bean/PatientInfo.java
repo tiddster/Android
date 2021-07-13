@@ -14,6 +14,12 @@ public class PatientInfo {
     @PrimaryKey(autoGenerate = true)
     public int number;
 
+    @ColumnInfo(name = "p_Info_doctor")
+    public String doctorName;
+
+    @ColumnInfo(name = "p_Info_hospital")
+    public String hospital;
+
     @ColumnInfo(name = "sex")
     public String sex;
 
@@ -47,6 +53,8 @@ public class PatientInfo {
         this.sex = sex;
         this.age = age;
         this.blood = blood;
+        this.hospital = hospital;
+        this.doctorName = doctorName;
     }
 
     public String getName() {
@@ -96,57 +104,20 @@ public class PatientInfo {
     public void setPassword(String password) {
         this.password = password;
     }
-    /*
 
-    public String getBook_month() {
-        return book_month;
+    public String getDoctorName() {
+        return doctorName;
     }
 
-    public void setBook_month(String book_month) {
-        this.book_month = book_month;
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
-    public String getBook_day() {
-        return book_day;
+    public String getHospital() {
+        return hospital;
     }
 
-    public void setBook_day(String book_day) {
-        this.book_day = book_day;
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
-
-    public int getHours() {
-        return Hours;
-    }
-
-    public void setHours(int hours) {
-        Hours = hours;
-    }
-
-    public int getCircumstance() {
-        return circumstance;
-    }
-
-    public void setCircumstance(int circumstance) {
-        this.circumstance = circumstance;
-    }
-
-     */
-
-    /*
-    public List<PatientBloodInfo> getPatientBloodInfoList() {
-        return mPatientBloodInfoList;
-    }
-
-    public void setPatientBloodInfoList(List<PatientBloodInfo> patientBloodInfoList) {
-        mPatientBloodInfoList = patientBloodInfoList;
-    }
-
-    public List<PatientBookDate> getPatientBookDateList() {
-        return mPatientBookDateList;
-    }
-
-    public void setPatientBookDateList(List<PatientBookDate> patientBookDateList) {
-        mPatientBookDateList = patientBookDateList;
-    }
-     */
 }

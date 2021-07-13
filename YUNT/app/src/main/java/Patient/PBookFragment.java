@@ -1,6 +1,7 @@
 package Patient;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -17,13 +18,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.room.Delete;
 
 import com.example.yunt.R;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 
+import Bean.PatientBlood;
+import Bean.PatientBloodDao;
 import Bean.PatientBook;
 import Bean.PatientBookDao;
 import Bean.PatientDataBase;
@@ -31,17 +37,23 @@ import Bean.PatientDataBase;
 public class PBookFragment extends Fragment {
     //EditText editTime,editMonth,editDay;
     ImageButton bookingButton;
-    TextView bookRemainder;
-    boolean isBook = false;
+    TextView bookRemainder,interval_time;
+    boolean isBook = false, isTouXi = false;
     public static int id;
     public static String name;
     public static int age;
+    public static int sYear,sMonth,sDay;
     private PatientBook mPatientBook;
+    private PatientBlood mPatientBlood;
     private PatientDataBase mPatientDataBase;
+    private PatientDataBase nPatientDataBase;
     private PatientBookDao mPatientBookDao;
-    Calendar mCalendar = Calendar.getInstance();
-    int Month, Day, Hour;
+    private PatientBloodDao mPatientBloodDao;
 
+    Calendar mCalendar = Calendar.getInstance();
+    int Month, Day, Hour, Year, interval = 0;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,17 +63,46 @@ public class PBookFragment extends Fragment {
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void initView(View view) {
+        Month = mCalendar.get(Calendar.MONTH)+1;
+        Day = mCalendar.get(Calendar.DATE);
+        Year = mCalendar.get(Calendar.YEAR);
+
         SharedPreferences sp = getActivity().getSharedPreferences("GET", 0);
         id = sp.getInt("ID", 0);
         name = sp.getString("NAME", null);
         age = sp.getInt("AGE",0);
 
         mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
+        nPatientDataBase = PatientDataBase.getBLOODInstance(getActivity());
         mPatientBookDao = mPatientDataBase.getDateDao();
+        mPatientBloodDao = nPatientDataBase.getPatientBloodDao();
 
         bookingButton = view.findViewById(R.id.bookingButton);
         bookRemainder = view.findViewById(R.id.bookReminder);
+        interval_time = view.findViewById(R.id.interval_time);
+
+        for(PatientBlood patientBlood : mPatientBloodDao.getAllBlood()){
+            if(patientBlood.getId() == id){
+                sMonth = patientBlood.getNext_month();
+                sDay = patientBlood.getNext_day();
+                LocalDate oldDate = LocalDate.of(Year, Month, Day);
+                LocalDate nextData = LocalDate.of(Year,sMonth,sDay);
+                Period p = Period.between(oldDate, nextData);
+                interval = p.getDays();
+                isTouXi = true;
+                break;
+            }
+        }
+
+        if(isTouXi){
+            if(interval>0)
+                interval_time.setText("距离下次透析还剩"+interval+"天");
+            else
+                interval_time.setText("今天需要透析，请及时预约");
+        }
+
 
         /*
         editTime = view.findViewById(R.id.booking_hours);
@@ -119,16 +160,18 @@ public class PBookFragment extends Fragment {
                     mCalendarView = view.findViewById(R.id.calendarView2);
                     editHours = view.findViewById(R.id.editHours);
 
-                    Month = mCalendar.get(Calendar.MONTH)+1;
-                    Day = mCalendar.get(Calendar.DATE);
                     showMD.setText(Month + " 月 " + Day + " 日  ");
 
                     mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                         @Override
                         public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                            Month = month + 1;
-                            Day = dayOfMonth;
-                            showMD.setText(Month + " 月 " + Day + " 日  ");
+                            if(interval==0){
+                                Toast.makeText(getActivity(),"今天是预约时间，无法更改日期",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Month = month + 1;
+                                Day = dayOfMonth;
+                                showMD.setText(Month + " 月 " + Day + " 日  ");
+                            }
                         }
                     });
 
@@ -138,15 +181,18 @@ public class PBookFragment extends Fragment {
                         public void onClick(View v) {
                             if (!TextUtils.isEmpty(editHours.getText())) {
                                 Hour = Integer.parseInt(editHours.getText().toString());
-                                if (Hour >= 8 && Hour <= 14) {
-                                    bookingButton.setImageResource(R.drawable.clockok_foreground);
-                                    InsertNewBooking();
-                                    Toast.makeText(getActivity(),"预约成功",Toast.LENGTH_SHORT).show();
-                                    popupWindow.dismiss();
-                                    bookRemainder.setText("您的预约时间为:" + Month + "月" + Day + "日" + Hour + "时");
-                                    isBook = true;
+                                if(Day == mCalendar.get(Calendar.DAY_OF_MONTH)){
+                                    if(Hour > mCalendar.get(Calendar.HOUR_OF_DAY)){
+                                        Book(popupWindow);
+                                    } else {
+                                        Toast.makeText(getActivity(),"今日此时段已过，请重新选择",Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
-                                    Toast.makeText(getActivity(), "因透析时间较长，请选择8点至14点的时间", Toast.LENGTH_SHORT).show();
+                                    if(Hour >= 8 && Hour <=16){
+                                        Book(popupWindow);
+                                    } else {
+                                        Toast.makeText(getActivity(),"因透析时间过长，请选择8点至16点的时间",Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "请输入正确时间", Toast.LENGTH_SHORT);
@@ -171,35 +217,6 @@ public class PBookFragment extends Fragment {
                     Toast.makeText(getActivity(),"取消成功",Toast.LENGTH_SHORT).show();
                 }
             }
-
-                /*
-                if(!TextUtils.isEmpty(editTime.getText())&&!TextUtils.isEmpty(editMonth.getText())&&!TextUtils.isEmpty(editDay.getText())) {
-
-                    int month = Integer.parseInt(editMonth.getText().toString());
-                    int day = Integer.parseInt(editDay.getText().toString());
-                    int hours = Integer.parseInt(editTime.getText().toString());
-
-                    if(month>0&&month<13&&hours<25&&hours>=0&&day>0&&day<=31){
-                            if (isBook) {
-                                bookingButton.setImageResource(R.drawable.clock_foreground);
-                                CancelBooking();
-                                isBook = false;
-                                Toast.makeText(getActivity(),"取消成功",Toast.LENGTH_SHORT).show();
-                            } else {
-                                bookingButton.setImageResource(R.drawable.clockok_foreground);
-                                InsertNewBooking();
-                                isBook = true;
-                                Toast.makeText(getActivity(),"预约成功",Toast.LENGTH_SHORT).show();
-                            }
-                    } else {
-                        Toast.makeText(getActivity(),"请输入正确时间",Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(),"您还未输入预约时间",Toast.LENGTH_SHORT).show();
-                }
-
-                 */
-
         });
     }
 
@@ -216,5 +233,14 @@ public class PBookFragment extends Fragment {
 
     public void CancelBooking() {
         mPatientBookDao.DeleteDate(mPatientBook);
+    }
+
+    public void Book(PopupWindow popupWindow){
+        bookingButton.setImageResource(R.drawable.clockok_foreground);
+        InsertNewBooking();
+        Toast.makeText(getActivity(),"预约成功",Toast.LENGTH_SHORT).show();
+        popupWindow.dismiss();
+        bookRemainder.setText("您的预约时间为:" + Month + "月" + Day + "日" + Hour + "时");
+        isBook = true;
     }
 }

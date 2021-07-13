@@ -118,6 +118,26 @@
             app:layout_constraintStart_toStartOf="@+id/p_confirm_name"
             app:layout_constraintTop_toBottomOf="@+id/p_confirm_name"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/d_confirm_doctorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="就诊医生：XXX"
+            app:layout_constraintStart_toStartOf="@+id/p_confirm_number"
+            app:layout_constraintTop_toBottomOf="@+id/p_confirm_number" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="就诊医院：XXX医院"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/d_confirm_doctorName"
+            app:layout_constraintTop_toBottomOf="@+id/d_confirm_doctorName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

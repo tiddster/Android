@@ -160,11 +160,13 @@ public class DBookingFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     mOnItemClick.onItemClick();
-                    Intent intent = new Intent(getActivity(),DInsertNewBloodActivity.class);
-                    intent.putExtra("ID", patientBook.getId());
-                    intent.putExtra("NAME",patientBook.getName());
-                    intent.putExtra("AGE",patientBook.getAge());
-                    startActivity(intent);
+                    if(patientBook.getCircumstance() != 2) {
+                        Intent intent = new Intent(getActivity(), DInsertNewBloodActivity.class);
+                        intent.putExtra("ID", patientBook.getId());
+                        intent.putExtra("NAME", patientBook.getName());
+                        intent.putExtra("AGE", patientBook.getAge());
+                        startActivity(intent);
+                    }
                 }
             });
         }

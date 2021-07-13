@@ -7,12 +7,12 @@
     android:background="#F5F5F5">
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/interval_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="距离下次透析还剩5天"
-        android:textSize="30sp"
+        android:layout_marginBottom="15dp"
+        android:text="今天需要透析，请及时预约"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/bookingButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +44,8 @@
 
     <ImageButton
         android:id="@+id/bookingButton"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="270dp"
+        android:layout_height="270dp"
         android:background="@drawable/circle"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

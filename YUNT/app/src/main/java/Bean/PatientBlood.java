@@ -9,6 +9,10 @@ public class PatientBlood {
     @PrimaryKey(autoGenerate = true)
     public int blood_id;
 
+    @ColumnInfo(name = "p_blood_doctorName")
+    public String doctorName;
+    @ColumnInfo(name = "p_blood_hospital")
+    public String hospital;
     @ColumnInfo(name = "id")
     public int id;
     @ColumnInfo(name = "BWeight")
@@ -107,5 +111,21 @@ public class PatientBlood {
 
     public void setBlood_id(int blood_id) {
         this.blood_id = blood_id;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 }
