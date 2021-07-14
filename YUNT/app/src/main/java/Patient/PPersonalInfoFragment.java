@@ -1,6 +1,7 @@
 package Patient;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,8 @@ import com.example.yunt.LoginActivity;
 import com.example.yunt.R;
 
 public class PPersonalInfoFragment extends Fragment {
-    TextView logout;
+    TextView logout,nameText,hospitalText;
+    String name,hospital;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,7 +27,16 @@ public class PPersonalInfoFragment extends Fragment {
     }
 
     public void interview(View view){
+        SharedPreferences sp = getActivity().getSharedPreferences("GET", 0);
+        hospital = sp.getString("HOSPITAL", null);
+        name = sp.getString("NAME", null);
+
         logout = view.findViewById(R.id.p_logout);
+        nameText = view.findViewById(R.id.p_info_patient_name);
+        hospitalText = view.findViewById(R.id.p_info_hospital_name);
+
+        nameText.setText(name);
+        hospitalText.setText(hospital);
     }
 
     public void listener(){

@@ -86,6 +86,7 @@ public class PBookFragment extends Fragment {
 
         for(PatientBlood patientBlood : mPatientBloodDao.getAllBlood()){
             if(patientBlood.getId() == id){
+                sYear = patientBlood.getNext_year();
                 sMonth = patientBlood.getNext_month();
                 sDay = patientBlood.getNext_day();
                 LocalDate oldDate = LocalDate.of(Year, Month, Day);
@@ -161,17 +162,29 @@ public class PBookFragment extends Fragment {
                     mCalendarView = view.findViewById(R.id.calendarView2);
                     editHours = view.findViewById(R.id.editHours);
 
-                    showMD.setText(Month + " 月 " + Day + " 日  ");
+                    showMD.setText(Year+"-"+Month + "-" + Day);
 
                     mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                             if(interval==0){
                                 Toast.makeText(getActivity(),"今天是预约时间，无法更改日期",Toast.LENGTH_SHORT).show();
-                            } else {
-                                Month = month + 1;
-                                Day = dayOfMonth;
-                                showMD.setText(Month + " 月 " + Day + " 日  ");
+                            }
+                            else {
+                                LocalDate AimDate = LocalDate.of(year, month+1, dayOfMonth);
+                                LocalDate nextDate = LocalDate.of(sYear,sMonth,sDay);
+                                LocalDate nowDate =  LocalDate.of(Year,Month,Day);
+                                if(nextDate.isBefore(AimDate)){
+                                    Toast.makeText(getActivity(),"预约日期过晚，请重新选择",Toast.LENGTH_SHORT).show();
+                                } else if(AimDate.isBefore(nowDate)){
+                                    Toast.makeText(getActivity(),"预约日期不正确，请重新选择",Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Year = year;
+                                    Month = month + 1;
+                                    Day = dayOfMonth;
+                                    showMD.setText(Year+"-"+Month + "-" + Day);
+                                }
                             }
                         }
                     });

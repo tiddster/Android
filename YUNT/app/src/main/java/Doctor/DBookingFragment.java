@@ -1,4 +1,4 @@
-
+ 
 package Doctor;
 
 import android.content.Intent;
@@ -166,7 +166,6 @@ public class DBookingFragment extends Fragment {
             holder.bookItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClick.onItemClick();
                     if(patientBook.getCircumstance() != 2) {
                         Intent intent = new Intent(getActivity(), DInsertNewBloodActivity.class);
                         intent.putExtra("ID", patientBook.getId());

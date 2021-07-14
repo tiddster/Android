@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,6 @@ import Bean.PatientInfoDao;
 public class DInfoFragment extends Fragment {
     public RecyclerView mRecyclerView;
     public PatientAdapter mPatientAdapter;
-    public List<PatientInfo> mPatientInfoList = new ArrayList<>();
     private static String doctorName,hospital;
     FloatingActionButton mButton;
     PatientInfoDao mPatientInfoDao;
@@ -60,6 +60,7 @@ public class DInfoFragment extends Fragment {
     }
 
     public void UpdateUI(){
+        List<PatientInfo> mPatientInfoList = new ArrayList<>();
         for (PatientInfo patientInfo : mPatientInfoDao.getList()){
             if(patientInfo.getHospital().equals(hospital)){
                 mPatientInfoList.add(patientInfo);
@@ -81,6 +82,7 @@ public class DInfoFragment extends Fragment {
 
     private class PatientHolder extends RecyclerView.ViewHolder{
         private TextView name,id,sex,age,blood;
+        private ConstraintLayout item;
 
         public PatientHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +91,7 @@ public class DInfoFragment extends Fragment {
             sex = itemView.findViewById(R.id.p_sex);
             age = itemView.findViewById(R.id.p_age);
             blood = itemView.findViewById(R.id.p_blood);
+            item = itemView.findViewById(R.id.d_patient_info_item);
         }
 
         public  void bind(PatientInfo patientInfo, int position){
@@ -106,6 +109,11 @@ public class DInfoFragment extends Fragment {
             mPatientInfoList = patientInfoList;
         }
 
+        OnItemClick mOnItemClick;
+        private void setOnItemClick(OnItemClick onItemClick){
+            mOnItemClick = onItemClick;
+        }
+
         @NonNull
         @Override
         public PatientHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -118,6 +126,16 @@ public class DInfoFragment extends Fragment {
         public void onBindViewHolder(@NonNull PatientHolder holder, int position) {
             PatientInfo patientInfo = mPatientInfoList.get(position);
             holder.bind(patientInfo,position);
+            holder.item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(),DDetailsActivity.class);
+                    intent.putExtra("NAME",patientInfo.getName());
+                    intent.putExtra("AGE",patientInfo.getAge());
+                    intent.putExtra("ID",patientInfo.getNumber());
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override

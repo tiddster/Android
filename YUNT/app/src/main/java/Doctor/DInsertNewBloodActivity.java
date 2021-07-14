@@ -2,6 +2,7 @@ package Doctor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -17,11 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.yunt.R;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import Bean.PatientBlood;
@@ -40,11 +45,10 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
     PatientBookDao mPatientBookDao;
     PatientBook mPatientBook;
     float AW,BW,AP,BP,CR;
-    int nextMonth = 0,nextDay = 0;
-    int ID;
-    int age;
+    int nextMonth = 0,nextDay = 0,nextYear = 0,ID,age,thisYear,thisMonth,thisDay;
     String name;
     List<PatientBook> mList = new ArrayList<>();
+    Calendar mCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +102,11 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
         doctorText.setText("就诊医生："+doctorName);
         hospitalText.setText("就诊医院："+hospital);
 
-
         nextTime = findViewById(R.id.nextTime);
+
+        thisYear = mCalendar.get(Calendar.YEAR);
+        thisMonth = mCalendar.get(Calendar.MONTH)+1;
+        thisDay = mCalendar.get(Calendar.DAY_OF_MONTH);
     }
 
     public void Listener(){
@@ -119,7 +126,8 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
                     AW = Float.parseFloat(AWEdit.getText().toString());
                     BW = Float.parseFloat(BWEdit.getText().toString());
                     CR = Float.parseFloat(CREdit.getText().toString());
-                    PatientBlood patientBlood = new PatientBlood(ID,BW,AW,AP,BP,CR,nextMonth,nextDay);
+                    PatientBlood patientBlood = new PatientBlood(ID,BW,AW,AP,BP,CR,nextYear,nextMonth,nextDay,thisYear,thisMonth,thisDay);
+                    patientBlood.setDoctorName(doctorName);
                     mPatientBloodDao.InsertBlood(patientBlood);
                     mPatientBook.setCircumstance(2);
                     mPatientBookDao.UpdateData(mPatientBook);
@@ -152,12 +160,20 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
 
                 mCalendarView = view.findViewById(R.id.calendarView3);
                 mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                        nextMonth = month + 1;
-                        nextDay = dayOfMonth;
-                        nextTime.setText("建议下次预约时间： " + String.valueOf(nextMonth) + "月"+ String.valueOf(nextDay) + "日");
-                        popupWindow.dismiss();
+                        LocalDate oldDate = LocalDate.of(thisYear, thisMonth, thisDay);
+                        LocalDate nextData = LocalDate.of(year,month+1,dayOfMonth);
+                        if(nextData.isAfter(oldDate)) {
+                            nextYear = year;
+                            nextMonth = month + 1;
+                            nextDay = dayOfMonth;
+                            nextTime.setText("建议下次预约时间：" + String.valueOf(nextYear) + "-" + String.valueOf(nextMonth) + "-" + String.valueOf(nextDay));
+                            popupWindow.dismiss();
+                        } else {
+                            Toast.makeText(DInsertNewBloodActivity.this,"请选择正确日期",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 

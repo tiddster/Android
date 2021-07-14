@@ -13,6 +13,7 @@
         <activity android:name="Patient.PatientActivity"></activity>
         <activity android:name="Doctor.DInsertNewPatientActivity"></activity>
         <activity android:name="Doctor.DInsertNewBloodActivity"></activity>
+        <activity android:name="Doctor.DDetailsActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
