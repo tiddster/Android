@@ -18,7 +18,7 @@ public class DoctorAccount {
     @ColumnInfo(name = "hospital")
     String hospital;
 
-    public DoctorAccount(String account, String password, String hospital) {
+    public DoctorAccount(String account, String password, String hospital, int id) {
         this.account = account;
         this.password = password;
         this.hospital = hospital;
@@ -46,5 +46,13 @@ public class DoctorAccount {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 }

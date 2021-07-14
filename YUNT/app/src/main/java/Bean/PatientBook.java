@@ -9,9 +9,6 @@ public class PatientBook {
     @PrimaryKey(autoGenerate = true)
     public int booking_number;
 
-    @ColumnInfo(name = "p_book_doctor")
-    public String doctorName;
-
     @ColumnInfo(name = "p_book_hospital")
     public String hospital;
 
@@ -108,5 +105,13 @@ public class PatientBook {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 }

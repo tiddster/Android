@@ -1,6 +1,7 @@
 package Doctor;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,8 @@ import Bean.PatientInfoDao;
 public class DInfoFragment extends Fragment {
     public RecyclerView mRecyclerView;
     public PatientAdapter mPatientAdapter;
-    public List<PatientInfo> mPatientInfoList;
+    public List<PatientInfo> mPatientInfoList = new ArrayList<>();
+    private static String doctorName,hospital;
     FloatingActionButton mButton;
     PatientInfoDao mPatientInfoDao;
     PatientDataBase mPatientDataBase;
@@ -42,6 +44,10 @@ public class DInfoFragment extends Fragment {
     }
 
     public void initView(View view) {
+        SharedPreferences sp = getActivity().getSharedPreferences("GET", 0);
+        hospital = sp.getString("HOSPITAL", null);
+        doctorName = sp.getString("DOCTORNAME", null);
+
         mPatientDataBase = PatientDataBase.getBasicInstance(getActivity());
         mPatientInfoDao = mPatientDataBase.getPatientInfoDao();
 
@@ -54,7 +60,11 @@ public class DInfoFragment extends Fragment {
     }
 
     public void UpdateUI(){
-        mPatientInfoList = mPatientInfoDao.getList();
+        for (PatientInfo patientInfo : mPatientInfoDao.getList()){
+            if(patientInfo.getHospital().equals(hospital)){
+                mPatientInfoList.add(patientInfo);
+            }
+        }
         mPatientAdapter = new PatientAdapter(mPatientInfoList);
         mRecyclerView.setAdapter(mPatientAdapter);
     }

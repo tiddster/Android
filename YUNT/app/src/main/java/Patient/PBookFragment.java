@@ -40,7 +40,7 @@ public class PBookFragment extends Fragment {
     TextView bookRemainder,interval_time;
     boolean isBook = false, isTouXi = false;
     public static int id;
-    public static String name;
+    public static String name,hospital;
     public static int age;
     public static int sYear,sMonth,sDay;
     private PatientBook mPatientBook;
@@ -73,6 +73,7 @@ public class PBookFragment extends Fragment {
         id = sp.getInt("ID", 0);
         name = sp.getString("NAME", null);
         age = sp.getInt("AGE",0);
+        hospital = sp.getString("HOSPITAL",null);
 
         mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
         nPatientDataBase = PatientDataBase.getBLOODInstance(getActivity());
@@ -228,6 +229,7 @@ public class PBookFragment extends Fragment {
 
     public void InsertNewBooking() {
         mPatientBook = new PatientBook(name, id, String.valueOf(Month), String.valueOf(Day), Hour, 1,age);
+        mPatientBook.setHospital(hospital);
         mPatientBookDao.InsertDate(mPatientBook);
     }
 

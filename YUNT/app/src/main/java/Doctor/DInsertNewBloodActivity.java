@@ -1,6 +1,7 @@
 package Doctor;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -30,8 +31,9 @@ import Bean.PatientBookDao;
 import Bean.PatientDataBase;
 
 public class DInsertNewBloodActivity extends AppCompatActivity {
+    private static String doctorName,hospital;
     ImageView left;
-    TextView reserve,nextTime,nameText,ageText,idText;
+    TextView reserve,nextTime,nameText,ageText,idText,doctorText,hospitalText;
     EditText AWEdit,BWEdit,APEdit,BPEdit,CREdit;
     PatientDataBase mPatientDataBase,nPatientDataBase;
     PatientBloodDao mPatientBloodDao;
@@ -54,6 +56,10 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
     }
 
     public void initView(){
+        SharedPreferences sp = getSharedPreferences("GET", 0);
+        hospital = sp.getString("HOSPITAL", null);
+        doctorName = sp.getString("DOCTORNAME", null);
+
         mPatientDataBase = PatientDataBase.getBLOODInstance(this);
         mPatientBloodDao = mPatientDataBase.getPatientBloodDao();
         nPatientDataBase = PatientDataBase.getDateInstance(this);
@@ -68,7 +74,6 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
         for(PatientBook patientBook : mList){
             if(patientBook.getId() == ID){
                 mPatientBook = patientBook;
-                Toast.makeText(DInsertNewBloodActivity.this,String.valueOf(ID)+"/"+String.valueOf(patientBook.getId()),Toast.LENGTH_SHORT).show();
                 break;
             }
         }
@@ -84,10 +89,15 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
         nameText = findViewById(R.id.p_confirm_name);
         idText = findViewById(R.id.p_confirm_number);
         ageText = findViewById(R.id.p_confirm_age);
+        hospitalText = findViewById(R.id.d_confirm_hospital);
+        doctorText = findViewById(R.id.d_confirm_doctorName);
 
         nameText.setText(name);
         idText.setText(String.valueOf(ID));
         ageText.setText("年龄："+String.valueOf(age));
+        doctorText.setText("就诊医生："+doctorName);
+        hospitalText.setText("就诊医院："+hospital);
+
 
         nextTime = findViewById(R.id.nextTime);
     }

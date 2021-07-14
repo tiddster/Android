@@ -2,12 +2,14 @@
 package Doctor;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,6 +35,7 @@ public class DBookingFragment extends Fragment {
     public BookAdapter mAdapter;
     private PatientDataBase mPatientDataBase;
     private PatientBookDao mPatientBookDao;
+    private static String name,hospital;
     Calendar mCalendar = Calendar.getInstance();
     CalendarView mCalendarView;
     int Day,Month,hour;
@@ -48,6 +51,10 @@ public class DBookingFragment extends Fragment {
     public void initView(View view){
         mPatientDataBase = PatientDataBase.getDateInstance(getActivity());
         mPatientBookDao = mPatientDataBase.getDateDao();
+
+        SharedPreferences sp = getActivity().getSharedPreferences("GET", 0);
+        hospital = sp.getString("HOSPITAL", null);
+        name = sp.getString("DOCTORNAME", null);
 
         Month = mCalendar.get(Calendar.MONTH)+1;
         Day = mCalendar.get(Calendar.DATE);
@@ -91,7 +98,7 @@ public class DBookingFragment extends Fragment {
         Day = day;
         Month = month;
         for(PatientBook patientBook : mPatientBookDao.getDateList()){
-            if(patientBook.getBook_month().equals(String.valueOf(Month)) && patientBook.getBook_day().equals(String.valueOf(Day))){
+            if(patientBook.getBook_month().equals(String.valueOf(Month)) && patientBook.getBook_day().equals(String.valueOf(Day)) && patientBook.getHospital().equals(hospital)){
                 patientBookList.add(patientBook);
             }
         }
@@ -99,7 +106,7 @@ public class DBookingFragment extends Fragment {
     }
 
     private class BookHolder extends RecyclerView.ViewHolder{
-        private TextView bookedName,bookedId,bookedHours,bookedCircum;
+        private TextView bookedName,bookedId,bookedHours;
         private ConstraintLayout bookItem;
 
         public BookHolder(@NonNull View itemView) {

@@ -1,5 +1,6 @@
 package Doctor;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,10 +24,11 @@ import Bean.PatientInfo;
 import Bean.PatientInfoDao;
 
 public class DInsertNewPatientActivity extends AppCompatActivity {
+    private static String doctorName,hospital;
     EditText editName,editAge,editBlood;
     RadioButton maleButton,femaleButton;
     RadioGroup mRadioGroup;
-    TextView reserve,textId;
+    TextView reserve,textId,textDName,textHName;
     ImageView left;
     PatientInfoDao mPatientInfoDao;
     PatientDataBase mPatientDataBase;
@@ -49,6 +51,10 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
     }
 
     public void initView(){
+        SharedPreferences sp = getSharedPreferences("GET", 0);
+        hospital = sp.getString("HOSPITAL", null);
+        doctorName = sp.getString("DOCTORNAME", null);
+
         editName = findViewById(R.id.editName);
         editAge = findViewById(R.id.editAge);
         editBlood = findViewById(R.id.editBlood);
@@ -58,6 +64,11 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
         textId = findViewById(R.id.textId);
         reserve = findViewById(R.id.reserve);
         left = findViewById(R.id.left);
+        textDName = findViewById(R.id.d_new_patient_DName);
+        textHName = findViewById(R.id.d_new_patient_HName);
+
+        textHName.setText("就诊医院："+hospital);
+        textDName.setText("就诊医生："+doctorName);
 
         year = mCalendar.get(Calendar.YEAR);
         month = mCalendar.get(Calendar.MONTH+1);
@@ -105,6 +116,7 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
     public void Insert(){
         PatientInfo patientInfo = new PatientInfo(editName.getText().toString(),id,sex,Integer.parseInt(editAge.getText().toString()),editBlood.getText().toString());
         patientInfo.setPassword("123456");
+        patientInfo.setHospital(hospital);
         mPatientInfoDao.InsertPatient(patientInfo);
     }
 
