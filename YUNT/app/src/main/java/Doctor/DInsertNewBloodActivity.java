@@ -34,6 +34,7 @@ import Bean.PatientBloodDao;
 import Bean.PatientBook;
 import Bean.PatientBookDao;
 import Bean.PatientDataBase;
+import Bean.PatientInfo;
 
 public class DInsertNewBloodActivity extends AppCompatActivity {
     private static String doctorName,hospital;
@@ -126,12 +127,16 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
                     AW = Float.parseFloat(AWEdit.getText().toString());
                     BW = Float.parseFloat(BWEdit.getText().toString());
                     CR = Float.parseFloat(CREdit.getText().toString());
-                    PatientBlood patientBlood = new PatientBlood(ID,BW,AW,AP,BP,CR,nextYear,nextMonth,nextDay,thisYear,thisMonth,thisDay);
-                    patientBlood.setDoctorName(doctorName);
-                    mPatientBloodDao.InsertBlood(patientBlood);
-                    mPatientBook.setCircumstance(2);
-                    mPatientBookDao.UpdateData(mPatientBook);
-                    finish();
+                    if(JudgeWeight(AW)&&JudgeWeight(BW)&&JudgePressure(AP)&&JudgePressure(BP)&&JudgeCR(CR)) {
+                        PatientBlood patientBlood = new PatientBlood(ID, BW, AW, AP, BP, CR, nextYear, nextMonth, nextDay, thisYear, thisMonth, thisDay);
+                        patientBlood.setDoctorName(doctorName);
+                        mPatientBloodDao.InsertBlood(patientBlood);
+                        mPatientBook.setCircumstance(2);
+                        mPatientBookDao.UpdateData(mPatientBook);
+                        finish();
+                    } else {
+                        Toast.makeText(DInsertNewBloodActivity.this,"数据输入不符合实际",Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(DInsertNewBloodActivity.this,"请输入正确数据",Toast.LENGTH_SHORT).show();
                 }
@@ -188,8 +193,28 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
         getWindow().setAttributes(lp);
     }
 
-    public void InsertBlood(){
+    public boolean JudgeWeight(Float n){
+        if(n<=100&&n>=30){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    public boolean JudgePressure(Float n){
+        if(n<=160&&n>=100){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean JudgeCR(Float n){
+        if(n<=133&&n>=44){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean JudgeNull(EditText editText){

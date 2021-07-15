@@ -114,10 +114,32 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
     }
 
     public void Insert(){
-        PatientInfo patientInfo = new PatientInfo(editName.getText().toString(),id,sex,Integer.parseInt(editAge.getText().toString()),editBlood.getText().toString());
-        patientInfo.setPassword("123456");
-        patientInfo.setHospital(hospital);
-        mPatientInfoDao.InsertPatient(patientInfo);
+        int age = Integer.parseInt(editAge.getText().toString());
+        String blood = editBlood.getText().toString();
+        if(JudgeAge(age)&&JudgeBlood(blood)) {
+            PatientInfo patientInfo = new PatientInfo(editName.getText().toString(), id, sex, age, blood);
+            patientInfo.setPassword("123456");
+            patientInfo.setHospital(hospital);
+            mPatientInfoDao.InsertPatient(patientInfo);
+        } else {
+            Toast.makeText(DInsertNewPatientActivity.this,"数据输入不符合实际",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean JudgeAge(int n){
+        if(n>0&&n<120){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean JudgeBlood(String s){
+        if(s.equals("A")||s.equals("AB")||s.equals("B")||s.equals("O")){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void Query(){
