@@ -17,4 +17,7 @@ public interface DoctorAccountDao {
 
     @Query("SELECT * FROM DoctorAccount ORDER BY id")
     List<DoctorAccount> getAllDoctorAccount();
+
+    @Query("SELECT * FROM doctoraccount WHERE ID IN(:ID)")
+    DoctorAccount getById(int ID);
 }

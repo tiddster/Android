@@ -56,6 +56,8 @@ public class DInsertNewBloodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_book_confirm_window);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         initView();
         Listener();
     }

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,9 +26,9 @@ import Patient.PatientActivity;
 
 public class LoginActivity extends AppCompatActivity {
     EditText account,password;
-    TextView exchangeButton,Title;
-    TextView loginButton;
+    TextView exchangeButton,Title,loginButton,signUpButton;
     String DoctorName,Hospital;
+    int DoctorId;
     ConstraintLayout mConstraintLayout;
     int type = 0;
     public PatientDataBase mPatientDataBase;
@@ -39,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_in);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
 
         initView();
         Listener();
@@ -56,8 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.Password);
         account = findViewById(R.id.Account);
         Title = findViewById(R.id.title);
+        signUpButton = findViewById(R.id.sign_up);
 
-        insert();
+        signUpButton.setVisibility(View.GONE);
     }
 
     public void Listener() {
@@ -70,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginButton.setBackgroundResource(R.drawable.shape_login);
                     Title.setTextColor(Color.parseColor("#87B8FD"));
                     loginButton.setTextColor(Color.parseColor("#87B8FD"));
+                    signUpButton.setVisibility(View.VISIBLE);
                     loginButton.setText("医生登录");
                 }
                 else {
@@ -78,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginButton.setBackgroundResource(R.drawable.shape_login_2);
                     Title.setTextColor(Color.parseColor("#01BAA7"));
                     loginButton.setTextColor(Color.parseColor("#01BAA7"));
+                    signUpButton.setVisibility(View.GONE);
                     loginButton.setText("患者登录");
                 }
             }
@@ -120,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             editor.putString("HOSPITAL",Hospital);
                             editor.putString("DOCTORNAME",DoctorName);
+                            editor.putInt("ID",DoctorId);
                             editor.commit();
 
                             Intent intent = new Intent(LoginActivity.this, DoctorActivity.class);
@@ -130,6 +138,14 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                 }
+            }
+        });
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -152,21 +168,15 @@ public class LoginActivity extends AppCompatActivity {
         boolean isLogIn = false;
         List<DoctorAccount> doctorAccountList = mDoctorAccountDao.getAllDoctorAccount();
         for(DoctorAccount doctorAccount : doctorAccountList){
-            if(doctorAccount.getAccount().equals(account.getText().toString())
+            if(doctorAccount.getId() == Integer.parseInt(account.getText().toString())
                     && doctorAccount.getPassword().equals(password.getText().toString())){
                 DoctorName = doctorAccount.getAccount();
                 Hospital = doctorAccount.getHospital();
+                DoctorId = doctorAccount.getId();
                 isLogIn = true;
                 break;
             }
         }
         return isLogIn;
-    }
-
-    public void insert(){
-        DoctorAccount doctorAccount = new DoctorAccount("Mike","123456","AAA医院",1);
-        DoctorAccount doctorAccount2 = new DoctorAccount("Tom","123456","BBB医院",2);
-        DoctorAccount doctorAccount3 = new DoctorAccount("Tony","123456","AAA医院",3);
-        mDoctorAccountDao.insertAccount(doctorAccount,doctorAccount2,doctorAccount3);
     }
 }

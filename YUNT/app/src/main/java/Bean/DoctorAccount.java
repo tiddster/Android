@@ -18,10 +18,11 @@ public class DoctorAccount {
     @ColumnInfo(name = "hospital")
     String hospital;
 
-    public DoctorAccount(String account, String password, String hospital, int id) {
+    public DoctorAccount(String account, String password, String hospital,int id) {
         this.account = account;
         this.password = password;
         this.hospital = hospital;
+        this.id = id;
     }
 
     public int getId() {

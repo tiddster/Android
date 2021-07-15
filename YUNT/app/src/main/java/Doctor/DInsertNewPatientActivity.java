@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -45,6 +46,8 @@ public class DInsertNewPatientActivity extends AppCompatActivity {
 
         mPatientDataBase = PatientDataBase.getBasicInstance(this);
         mPatientInfoDao = mPatientDataBase.getPatientInfoDao();
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         initView();
         Listener();
