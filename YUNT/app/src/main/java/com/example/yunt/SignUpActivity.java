@@ -26,8 +26,8 @@ import Doctor.DInsertNewPatientActivity;
 public class SignUpActivity extends AppCompatActivity {
     public PatientDataBase nPatientDataBase;
     public DoctorAccountDao mDoctorAccountDao;
-    List<DoctorAccount> mDoctorAccounts = new ArrayList<>();
     EditText editName,editHospital,editPassword,editAge;
+    int index;
     ImageView left;
     TextView confirmSignUp,DId;
     int id;
@@ -92,22 +92,25 @@ public class SignUpActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void Query(){
-        mDoctorAccounts = mDoctorAccountDao.getAllDoctorAccount();
+        List<DoctorAccount> mDoctorAccounts =  mDoctorAccountDao.getAllDoctorAccount();
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH+9);
+        int month = calendar.get(Calendar.MONTH+2);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int index = 1;
+        index = 1;
+
+        System.out.println(mDoctorAccounts.size());
 
         ID = String.valueOf(year)+String.valueOf(month)+String.valueOf(day)+String.valueOf(index);
         id = Integer.parseInt(ID);
 
-        if(mDoctorAccounts.size()==0){
+        if(mDoctorAccounts.size() == 0){
             index = 1;
         } else {
             for(DoctorAccount doctorAccount : mDoctorAccounts){
+                System.out.println(id +" " +doctorAccount.getId());
                 if(id == doctorAccount.getId()){
-                    index++;
+                    index ++;
                     ID = String.valueOf(year)+String.valueOf(month)+String.valueOf(day)+String.valueOf(index);
                     id = Integer.parseInt(ID);
                 } else {

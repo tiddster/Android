@@ -179,7 +179,7 @@
             <EditText
                 android:id="@+id/Aweight"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/shape3"
@@ -220,7 +220,7 @@
             <EditText
                 android:id="@+id/Bweight"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/shape3"
@@ -261,7 +261,7 @@
             <EditText
                 android:id="@+id/Apressure"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:background="@drawable/shape3"
@@ -335,7 +335,7 @@
             <EditText
                 android:id="@+id/CR"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/shape3"
