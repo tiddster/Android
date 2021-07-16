@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F8F8F8">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
@@ -333,7 +334,6 @@
 
             <EditText
                 android:id="@+id/CR"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
@@ -341,6 +341,7 @@
                 android:background="@drawable/shape3"
                 android:digits="1234567890."
                 android:ems="6"
+                android:gravity="center"
                 android:inputType="number"
                 app:layout_constraintBottom_toBottomOf="@+id/textView34"
                 app:layout_constraintStart_toEndOf="@+id/textView34"
@@ -362,12 +363,12 @@
 
     <TextView
         android:id="@+id/nextTime"
-        android:elevation="10dp"
-        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/shape0"
+        android:elevation="10dp"
+        android:gravity="center"
         android:text="建议下次预约时间：未选择时间"
         android:textColor="#000000"
         android:textSize="20sp"
