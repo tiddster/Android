@@ -93,7 +93,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == 0) {
+                if(ADMLogIn()){
+                    Intent intent = new Intent(LoginActivity.this,ADMActivity.class);
+                    startActivity(intent);
+                } else if (type == 0) {
                     if(PatientLogIn()) {
                         SharedPreferences sp = getSharedPreferences("GET",0);
                         SharedPreferences.Editor editor = sp.edit();
@@ -177,6 +180,15 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             }
         }
+        return isLogIn;
+    }
+
+    public boolean ADMLogIn(){
+        boolean isLogIn = false;
+            if(Integer.parseInt(account.getText().toString())==87654321
+                    && password.getText().toString().equals("12345678")){
+                isLogIn = true;
+            }
         return isLogIn;
     }
 }

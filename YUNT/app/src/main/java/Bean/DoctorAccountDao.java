@@ -1,6 +1,7 @@
 package Bean;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -14,6 +15,9 @@ public interface DoctorAccountDao {
 
     @Update
     void UpdateAccount(DoctorAccount... doctorAccounts);
+
+    @Delete
+    void DeleteAccount(DoctorAccount... doctorAccounts);
 
     @Query("SELECT * FROM DoctorAccount ORDER BY id")
     List<DoctorAccount> getAllDoctorAccount();

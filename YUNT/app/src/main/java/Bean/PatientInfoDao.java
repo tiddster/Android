@@ -1,6 +1,7 @@
 package Bean;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -14,6 +15,9 @@ public interface PatientInfoDao {
 
     @Update
     void UpdatePatient(PatientInfo... patientInfos);
+
+    @Delete
+    void DeletePatient(PatientInfo... patientInfos);
 
     @Query("SELECT * FROM patientinfo ORDER BY number")
     List<PatientInfo> getList();
