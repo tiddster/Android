@@ -3,17 +3,22 @@ package com.example.calculate;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     EditText mEditText;
     TextView btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9;
-    TextView btn_plus, btn_minus, btn_multi, btn_division,btn_delete;
+    TextView btn_plus, btn_minus, btn_multi, btn_division;
+    TextView btn_clear,btn_delete;
     String text = "";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -28,7 +33,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initView() {
+        // 一开始就获取editText焦点，并不弹出软键盘
         mEditText = findViewById(R.id.Edit_Space);
+        mEditText.requestFocus();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mEditText.setShowSoftInputOnFocus(false);
+        }
+
         btn_0 = findViewById(R.id.btn_0);
         btn_1 = findViewById(R.id.btn_1);
         btn_2 = findViewById(R.id.btn_2);
@@ -44,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_multi = findViewById(R.id.btn_multi);
         btn_division = findViewById(R.id.btn_division);
         btn_delete = findViewById(R.id.btn_delete);
+        btn_clear = findViewById(R.id.btn_clear);
 
         btn_0.setOnClickListener(this);
         btn_1.setOnClickListener(this);
@@ -60,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_multi.setOnClickListener(this);
         btn_division.setOnClickListener(this);
         btn_delete.setOnClickListener(this);
+        btn_clear.setOnClickListener(this);
     }
 
     @Override
@@ -86,36 +99,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_9: text += "9";
                 break;
-            case R.id.btn_plus: text += "+";
+            case R.id.btn_plus:
+                if(insertSymbol()) text += "+";
                 break;
-            case R.id.btn_minus: text += "-";
+            case R.id.btn_minus:
+                if(insertSymbol()) text += "-";
+                else if(text.length() == 0) text += "-";
                 break;
-            case R.id.btn_multi: text += "×";
+            case R.id.btn_multi:
+                if(insertSymbol()) text += "×";
                 break;
-            case R.id.btn_division: text += "÷";
+            case R.id.btn_division:
+                if(insertSymbol()) text += "÷";
                 break;
             case R.id.btn_delete:
                 if(text.length()>0) {
                     text = text.substring(0, text.length() - 1);
                 }
                 break;
+            case R.id.btn_clear:text = "";
+                break;
 
         }
+        //字符多了就调整字符
         if(text.length() > 11 && text.length() <= 13){
             mEditText.setTextSize(40);
         } else if (text.length() > 13)
             mEditText.setTextSize(30);
+
         mEditText.setText(text);
+        //光标移至末尾
+        mEditText.setSelection(text.length());
     }
 
-    /*
-    protected void hideInput(View view) {
-        if (view == null)
-            return;
-        InputMethodManager inputMethodManager = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    //判断前一个字符是否是数字
+    public boolean insertSymbol(){
+        String temp = "";
+        if(text.length()>=2)
+            temp = text.substring(text.length()-1,text.length());
+        for(int i=0; i<=9; i++){
+            if(temp.equals(String.valueOf(i))){
+                return true;
+            }
         }
+        return false;
     }
-     */
 }
