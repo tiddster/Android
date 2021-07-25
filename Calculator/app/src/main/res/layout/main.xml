@@ -338,11 +338,11 @@
             android:clickable="true"
             android:textColor="#01F1D8"
             android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_rignt"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_right"
             app:layout_constraintStart_toStartOf="@+id/btn_clear" />
 
         <TextView
-            android:id="@+id/btn_rignt"
+            android:id="@+id/btn_right"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/circle"

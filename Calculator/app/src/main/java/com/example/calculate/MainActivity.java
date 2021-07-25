@@ -3,22 +3,19 @@ package com.example.calculate;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.MotionEvent;
+import android.text.Editable;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     EditText mEditText;
     TextView btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9;
-    TextView btn_plus, btn_minus, btn_multi, btn_division;
-    TextView btn_clear,btn_delete;
+    TextView btn_plus, btn_minus, btn_multi, btn_division, btn_power, btn_left, btn_right, btn_ln;
+    TextView btn_clear, btn_delete;
     String text = "";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -56,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_division = findViewById(R.id.btn_division);
         btn_delete = findViewById(R.id.btn_delete);
         btn_clear = findViewById(R.id.btn_clear);
+        btn_power = findViewById(R.id.btn_power);
+        btn_left = findViewById(R.id.btn_left);
+        btn_right = findViewById(R.id.btn_right);
+        btn_ln = findViewById(R.id.btn_ln);
 
         btn_0.setOnClickListener(this);
         btn_1.setOnClickListener(this);
@@ -73,74 +74,139 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_division.setOnClickListener(this);
         btn_delete.setOnClickListener(this);
         btn_clear.setOnClickListener(this);
+        btn_power.setOnClickListener(this);
+        btn_left.setOnClickListener(this);
+        btn_right.setOnClickListener(this);
+        btn_ln.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         mEditText.setTextSize(50);
-        switch (v.getId()){
-            case R.id.btn_0: text += "0";
+        Editable editable = mEditText.getText();
+        int index = mEditText.getSelectionStart();
+        switch (v.getId()) {
+            case R.id.btn_0:
+                //在光标处插入符号
+                editable.insert(index, "0");
+                text = editable.toString();
                 break;
-            case R.id.btn_1: text += "1";
+            case R.id.btn_1:
+                editable.insert(index, "1");
+                text = editable.toString();
                 break;
-            case R.id.btn_2: text += "2";
+            case R.id.btn_2:
+                editable.insert(index, "2");
+                text = editable.toString();
                 break;
-            case R.id.btn_3: text += "3";
+            case R.id.btn_3:
+                editable.insert(index, "3");
+                text = editable.toString();
                 break;
-            case R.id.btn_4: text += "4";
+            case R.id.btn_4:
+                editable.insert(index, "4");
+                text = editable.toString();
                 break;
-            case R.id.btn_5: text += "5";
+            case R.id.btn_5:
+                editable.insert(index, "5");
+                text = editable.toString();
                 break;
-            case R.id.btn_6: text += "6";
+            case R.id.btn_6:
+                editable.insert(index, "6");
+                text = editable.toString();
                 break;
-            case R.id.btn_7: text += "7";
+            case R.id.btn_7:
+                editable.insert(index, "7");
+                text = editable.toString();
                 break;
-            case R.id.btn_8: text += "8";
+            case R.id.btn_8:
+                editable.insert(index, "8");
+                text = editable.toString();
                 break;
-            case R.id.btn_9: text += "9";
+            case R.id.btn_9:
+                editable.insert(index, "9");
+                text = editable.toString();
+                break;
+            case R.id.btn_left:
+                editable.insert(index, "(");
+                text = editable.toString();
+                break;
+            case R.id.btn_right:
+                editable.insert(index, ")");
+                text = editable.toString();
+                break;
+
+            case R.id.btn_ln:
+                editable.insert(index, "ln()");
+                text = editable.toString();
+                break;
+            case R.id.btn_power:
+                if (insertSymbol(index))
+                    editable.insert(index, "^");
+                text = editable.toString();
                 break;
             case R.id.btn_plus:
-                if(insertSymbol()) text += "+";
+                if (insertSymbol(index))
+                    editable.insert(index, "+");
+                text = editable.toString();
                 break;
             case R.id.btn_minus:
-                if(insertSymbol()) text += "-";
-                else if(text.length() == 0) text += "-";
+                if (insertSymbol(index)) editable.insert(index, "-");
+                else if (text.length() == 0) editable.insert(index, "-");
+                text = editable.toString();
                 break;
             case R.id.btn_multi:
-                if(insertSymbol()) text += "×";
+                if (insertSymbol(index))
+                    editable.insert(index, "×");
+                text = editable.toString();
                 break;
             case R.id.btn_division:
-                if(insertSymbol()) text += "÷";
+                if (insertSymbol(index))
+                    editable.insert(index, "÷");
+                text = editable.toString();
+
                 break;
+
             case R.id.btn_delete:
-                if(text.length()>0) {
-                    text = text.substring(0, text.length() - 1);
+                if (index > 0) {
+                    editable.delete(index-1,index);
+                    text = editable.toString();
                 }
                 break;
-            case R.id.btn_clear:text = "";
+            case R.id.btn_clear:
+                text = "";
                 break;
 
         }
         //字符多了就调整字符
-        if(text.length() > 11 && text.length() <= 13){
+        if (text.length() > 11 && text.length() <= 13) {
             mEditText.setTextSize(40);
         } else if (text.length() > 13)
             mEditText.setTextSize(30);
 
         mEditText.setText(text);
-        //光标移至末尾
-        mEditText.setSelection(text.length());
+
+        //光标移至正确的位置
+        if(index + 1 <= text.length())
+            mEditText.setSelection(index+1);
+        else if(index == text.length())
+            mEditText.setSelection(index);
+        else
+            mEditText.setSelection(index-1);
     }
 
     //判断前一个字符是否是数字
-    public boolean insertSymbol(){
+    public boolean insertSymbol(int index) {
         String temp = "";
-        if(text.length()>=2)
-            temp = text.substring(text.length()-1,text.length());
-        for(int i=0; i<=9; i++){
-            if(temp.equals(String.valueOf(i))){
+        if (text.length() > 0)
+            temp = text.substring(index - 1, index);
+        for (int i = 0; i <= 9; i++) {
+            if (temp.equals(String.valueOf(i))) {
                 return true;
             }
+        }
+        if (temp == ")") {
+            return true;
         }
         return false;
     }
