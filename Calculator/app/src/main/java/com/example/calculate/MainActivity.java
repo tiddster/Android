@@ -11,11 +11,13 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Stack;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     EditText mEditText;
     TextView btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9;
     TextView btn_plus, btn_minus, btn_multi, btn_division, btn_power, btn_left, btn_right, btn_ln;
-    TextView btn_clear, btn_delete;
+    TextView btn_clear, btn_delete, btn_equal;
     String text = "";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_left = findViewById(R.id.btn_left);
         btn_right = findViewById(R.id.btn_right);
         btn_ln = findViewById(R.id.btn_ln);
+        btn_equal = findViewById(R.id.btn_equal);
 
         btn_0.setOnClickListener(this);
         btn_1.setOnClickListener(this);
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_left.setOnClickListener(this);
         btn_right.setOnClickListener(this);
         btn_ln.setOnClickListener(this);
+        btn_equal.setOnClickListener(this);
     }
 
     @Override
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mEditText.setTextSize(50);
         Editable editable = mEditText.getText();
         int index = mEditText.getSelectionStart();
+        boolean isCompute = false;
         switch (v.getId()) {
             case R.id.btn_0:
                 //在光标处插入符号
@@ -169,14 +174,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_delete:
                 if (index > 0) {
-                    editable.delete(index-1,index);
+                    editable.delete(index - 1, index);
                     text = editable.toString();
                 }
                 break;
             case R.id.btn_clear:
                 text = "";
                 break;
-
+            case R.id.btn_equal:
+                text = Suffix(text);
+                isCompute = true;
+                break;
         }
         //字符多了就调整字符
         if (text.length() > 11 && text.length() <= 13) {
@@ -187,12 +195,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mEditText.setText(text);
 
         //光标移至正确的位置
-        if(index + 1 <= text.length())
-            mEditText.setSelection(index+1);
-        else if(index == text.length())
-            mEditText.setSelection(index);
-        else
-            mEditText.setSelection(index-1);
+        if (isCompute) {
+            mEditText.setSelection(text.length());
+        } else {
+            if (index + 1 <= text.length())
+                mEditText.setSelection(index + 1);
+            else if (index == text.length())
+                mEditText.setSelection(index);
+            else
+                mEditText.setSelection(index - 1);
+        }
     }
 
     //判断前一个字符是否是数字
@@ -209,5 +221,76 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         return false;
+    }
+
+    public String Suffix(String text) {
+        Stack<String> numStack = new Stack<>();
+        Stack<String> symbolStack = new Stack<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        char[] chars = text.toCharArray();
+        String str = "";
+        boolean beforeIsNumber = false;
+        for (char c : chars) {
+            if (isNum(c)) {
+                str += c;
+                beforeIsNumber = true;
+            } else if (c == '(') {
+                if (beforeIsNumber) {
+                    numStack.push(str);
+                    beforeIsNumber = false;
+                }
+                str = String.valueOf(c);
+                numStack.push(str);
+
+            } else if (c == ')') {
+                while (true) {
+                    String top = symbolStack.pop();
+                    if ("(".equals(top)) {
+                        break;
+                    } else {
+                        numStack.push(top);
+                    }
+                }
+            } else {
+                while (true) {
+                    if (beforeIsNumber) {
+                        numStack.push(str);
+                        beforeIsNumber = false;
+                    }
+                    str = String.valueOf(c);
+                    if (symbolStack.isEmpty() || symbolStack.peek().equals("(")) {
+                        symbolStack.push(str);
+                        break;
+                    } else if (priority(str) > priority(symbolStack.peek())) {
+                        symbolStack.push(str);
+                        break;
+                    } else {
+                        numStack.push(symbolStack.pop());
+                    }
+                }
+            }
+        }
+        if(beforeIsNumber){
+            numStack.push(str);
+        }
+        while(!symbolStack.isEmpty()){
+            numStack.push(symbolStack.pop());
+        }
+        while (!numStack.isEmpty()) {
+            stringBuilder.append(numStack.pop());
+        }
+        return stringBuilder.toString();
+    }
+
+    public int priority(String str) {
+        if (str.equals("^")) return 3;
+        else if (str.equals("×") || str.equals("÷")) return 2;
+        else if (str.equals("+") || str.equals("-")) return 1;
+        else return 0;
+    }
+
+
+    public static boolean isNum(char c) {
+        return c >= 48 && c <= 57;
     }
 }
