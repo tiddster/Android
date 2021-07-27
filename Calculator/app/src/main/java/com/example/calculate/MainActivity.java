@@ -10,7 +10,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -182,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 text = "";
                 break;
             case R.id.btn_equal:
-                text = Suffix(text);
+                text = toSuffix(toStringList(text)).toString();
                 isCompute = true;
                 break;
         }
@@ -217,72 +222,89 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         }
-        if (temp == ")") {
+        if (temp.equals(")")) {
             return true;
         }
         return false;
     }
 
-    public String Suffix(String text) {
-        Stack<String> numStack = new Stack<>();
-        Stack<String> symbolStack = new Stack<>();
-        StringBuilder stringBuilder = new StringBuilder();
-        char[] chars = text.toCharArray();
-        String str = "";
-        boolean beforeIsNumber = false;
-        for (char c : chars) {
-            if (isNum(c)) {
-                str += c;
-                beforeIsNumber = true;
-            } else if (c == '(') {
-                if (beforeIsNumber) {
-                    numStack.push(str);
-                    beforeIsNumber = false;
+    public List<String> toStringList(String s) {
+        List<String> stringList = new ArrayList<>();
+        int i = 0;//指针，用于遍历中缀表达式字符串
+        String str;//对多位数的拼接工作
+        char c;//每遍历到一个字符，放入c
+        do {
+            c = s.charAt(i);//获取元素
+            if (c == '+' || c == '-' || c == '×' || c == '÷' || c == '(' || c == ')') {
+                //如果元素是运算符直接添加到List
+                stringList.add(c + "");
+                i++;
+            } else if (Character.isDigit(c) || c == '.') {
+                //如果元素是数字和小数点
+                str = "";
+                while (i < s.length() && (Character.isDigit(s.charAt(i)) || s.charAt(i) == '.')) {//直至下个不是小数点或数字的位置
+                    str += "" + s.charAt(i++);
                 }
-                str = String.valueOf(c);
-                numStack.push(str);
+                stringList.add(str);
+            } else {
+                i++;
+            }
+        } while (i < s.length());
 
-            } else if (c == ')') {
+        return stringList;
+    }
+
+    public List<String> toSuffix(List<String> strings) {
+        Stack<String> symbolStack = new Stack<>();
+        Stack<String> tempStack = new Stack<>();
+
+        for (String item : strings) {
+            if (item.matches("\\d+")) {
+                tempStack.push(item);
+            } else if (isOperator(item)) {
+                while (true) {
+                    if (symbolStack.isEmpty() || "(".equals(symbolStack.peek())) {
+                        symbolStack.push(item);
+                        break;
+                    } else if (priority(item) > priority(symbolStack.peek())) {
+                        symbolStack.push(item);
+                        break;
+                    } else {
+                        tempStack.push(symbolStack.pop());
+                    }
+                }
+            } else if ("(".equals(item)) {
+                symbolStack.push(item);
+            } else if (")".equals(item)) {
                 while (true) {
                     String top = symbolStack.pop();
                     if ("(".equals(top)) {
                         break;
                     } else {
-                        numStack.push(top);
+                        tempStack.push(top);
                     }
                 }
             } else {
-                while (true) {
-                    if (beforeIsNumber) {
-                        numStack.push(str);
-                        beforeIsNumber = false;
-                    }
-                    str = String.valueOf(c);
-                    if (symbolStack.isEmpty() || symbolStack.peek().equals("(")) {
-                        symbolStack.push(str);
-                        break;
-                    } else if (priority(str) > priority(symbolStack.peek())) {
-                        symbolStack.push(str);
-                        break;
-                    } else {
-                        numStack.push(symbolStack.pop());
-                    }
-                }
+                Toast.makeText(this, "表达式错误", Toast.LENGTH_SHORT).show();
             }
         }
-        if(beforeIsNumber){
-            numStack.push(str);
+
+        while (!symbolStack.isEmpty()) {
+            tempStack.push(symbolStack.pop());
         }
-        while(!symbolStack.isEmpty()){
-            numStack.push(symbolStack.pop());
+        Stack<String> resStack = new Stack<>();
+        while (!tempStack.isEmpty()){
+            resStack.push(tempStack.pop());
         }
-        while (!numStack.isEmpty()) {
-            stringBuilder.append(numStack.pop());
+
+        List<String> res = new ArrayList<>();
+        while (!resStack.isEmpty()) {
+            res.add(resStack.pop());
         }
-        return stringBuilder.toString();
+        return res;
     }
 
-    public int priority(String str) {
+    public  int priority(String str) {
         if (str.equals("^")) return 3;
         else if (str.equals("×") || str.equals("÷")) return 2;
         else if (str.equals("+") || str.equals("-")) return 1;
@@ -290,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public static boolean isNum(char c) {
-        return c >= 48 && c <= 57;
+    public boolean isOperator(String val) {
+        return "+".equals(val) || "-".equals(val) || "×".equals(val) || "÷".equals(val);
     }
 }
