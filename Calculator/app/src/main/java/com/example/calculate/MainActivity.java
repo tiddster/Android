@@ -20,10 +20,11 @@ import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     EditText mEditText;
-    TextView btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9;
+    TextView btn_0, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_p;
     TextView btn_plus, btn_minus, btn_multi, btn_division, btn_power, btn_left, btn_right, btn_ln;
     TextView btn_clear, btn_delete, btn_equal;
     String text = "";
+    String reg = "[0-9]\\d*\\.?\\d*";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_right = findViewById(R.id.btn_right);
         btn_ln = findViewById(R.id.btn_ln);
         btn_equal = findViewById(R.id.btn_equal);
+        btn_p = findViewById(R.id.btn_point);
 
         btn_0.setOnClickListener(this);
         btn_1.setOnClickListener(this);
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_right.setOnClickListener(this);
         btn_ln.setOnClickListener(this);
         btn_equal.setOnClickListener(this);
+        btn_p.setOnClickListener(this);
     }
 
     @Override
@@ -146,9 +149,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 text = editable.toString();
                 break;
 
-            case R.id.btn_ln:
-                editable.insert(index, "ln()");
+            case R.id.btn_point:
+                editable.insert(index, ".");
                 text = editable.toString();
+                break;
+            case R.id.btn_ln:
                 break;
             case R.id.btn_power:
                 if (insertSymbol(index))
@@ -162,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_minus:
                 if (insertSymbol(index)) editable.insert(index, "-");
-                else if (text.length() == 0) editable.insert(index, "-");
                 text = editable.toString();
                 break;
             case R.id.btn_multi:
@@ -174,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (insertSymbol(index))
                     editable.insert(index, "÷");
                 text = editable.toString();
-
                 break;
 
             case R.id.btn_delete:
@@ -187,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 text = "";
                 break;
             case R.id.btn_equal:
-                text = toSuffix(toStringList(text)).toString();
+                text = toSuffix(toStringList(text)) == null ? text : String.valueOf(calculate(toSuffix(toStringList(text))));
                 isCompute = true;
                 break;
         }
@@ -230,12 +233,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public List<String> toStringList(String s) {
         List<String> stringList = new ArrayList<>();
-        int i = 0;//指针，用于遍历中缀表达式字符串
-        String str;//对多位数的拼接工作
-        char c;//每遍历到一个字符，放入c
+        int i = 0;
+        String str;
+        char c;
         do {
             c = s.charAt(i);//获取元素
-            if (c == '+' || c == '-' || c == '×' || c == '÷' || c == '(' || c == ')') {
+            if (c == '+' || c == '-' || c == '×' || c == '÷' || c == '(' || c == ')' || c == '^') {
                 //如果元素是运算符直接添加到List
                 stringList.add(c + "");
                 i++;
@@ -257,25 +260,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public List<String> toSuffix(List<String> strings) {
         Stack<String> symbolStack = new Stack<>();
         Stack<String> tempStack = new Stack<>();
+        boolean isError= false;
 
-        for (String item : strings) {
-            if (item.matches("\\d+")) {
-                tempStack.push(item);
-            } else if (isOperator(item)) {
+        for (String string : strings) {
+            if (string.matches(reg)) {
+                tempStack.push(string);
+            } else if (isOperator(string)) {
                 while (true) {
                     if (symbolStack.isEmpty() || "(".equals(symbolStack.peek())) {
-                        symbolStack.push(item);
+                        symbolStack.push(string);
                         break;
-                    } else if (priority(item) > priority(symbolStack.peek())) {
-                        symbolStack.push(item);
+                    } else if (priority(string) > priority(symbolStack.peek())) {
+                        symbolStack.push(string);
                         break;
                     } else {
                         tempStack.push(symbolStack.pop());
                     }
                 }
-            } else if ("(".equals(item)) {
-                symbolStack.push(item);
-            } else if (")".equals(item)) {
+            } else if ("(".equals(string)) {
+                symbolStack.push(string);
+            } else if (")".equals(string)) {
                 while (true) {
                     String top = symbolStack.pop();
                     if ("(".equals(top)) {
@@ -286,22 +290,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             } else {
                 Toast.makeText(this, "表达式错误", Toast.LENGTH_SHORT).show();
+                isError = true;
             }
         }
 
-        while (!symbolStack.isEmpty()) {
-            tempStack.push(symbolStack.pop());
-        }
-        Stack<String> resStack = new Stack<>();
-        while (!tempStack.isEmpty()){
-            resStack.push(tempStack.pop());
-        }
+        if(!isError) {
+            while (!symbolStack.isEmpty()) {
+                tempStack.push(symbolStack.pop());
+            }
+            Stack<String> resStack = new Stack<>();
+            while (!tempStack.isEmpty()) {
+                resStack.push(tempStack.pop());
+            }
 
-        List<String> res = new ArrayList<>();
-        while (!resStack.isEmpty()) {
-            res.add(resStack.pop());
+            List<String> res = new ArrayList<>();
+            while (!resStack.isEmpty()) {
+                res.add(resStack.pop());
+            }
+            return res;
+        } else {
+            return null;
         }
-        return res;
+    }
+
+    public float calculate(List<String> stringList) {
+        Stack<String> calculateStack = new Stack<>();
+        for (String string : stringList) {
+            if (string.matches(reg)) {
+                calculateStack.push(string);
+            } else {
+                float num2 = Float.parseFloat(calculateStack.pop());
+                float num1 = Float.parseFloat(calculateStack.pop());
+                float res = 0;
+                if (string.equals("+")) {
+                    res = num1 + num2;
+                } else if (string.equals("-")) {
+                    res = num1 - num2;
+                } else if (string.equals("×")) {
+                    res = num1 * num2;
+                } else if (string.equals("÷")) {
+                    res = num1 / num2;
+                } else if(string.equals("^")){
+                    res = (float) Math.pow(num1,num2);
+                } else {
+                    throw new RuntimeException("运算符有误");
+                }
+                //计算过的结果再次入栈
+                calculateStack.push("" + res);
+            }
+        }
+        return Float.parseFloat(calculateStack.pop());
     }
 
     public  int priority(String str) {
@@ -313,6 +351,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public boolean isOperator(String val) {
-        return "+".equals(val) || "-".equals(val) || "×".equals(val) || "÷".equals(val);
+        return "+".equals(val) || "-".equals(val) || "×".equals(val) || "÷".equals(val) || val.equals("^");
     }
 }
