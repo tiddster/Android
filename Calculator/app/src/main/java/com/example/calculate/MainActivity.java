@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public boolean isOperator(String val) {
-        return "+".equals(val) || "-".equals(val) || "×".equals(val) || "÷".equals(val) || val.equals("^");
+    public boolean isOperator(String str) {
+        return str.equals("+") || str.equals("-") || str.equals("×") || str.equals("÷") || str.equals("^");
     }
 }
