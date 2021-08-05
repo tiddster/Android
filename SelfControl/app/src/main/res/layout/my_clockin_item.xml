@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clockin_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/punch"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/punch_undone"
+        android:text="我要打卡"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/clockin_delete"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginRight="38dp"
+        android:background="@mipmap/delete_foreground"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/clockin_label_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/clockin_times_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="打卡数："
+        app:layout_constraintBottom_toBottomOf="@+id/clockin_label_image"
+        app:layout_constraintStart_toEndOf="@+id/clockin_label_image"
+        app:layout_constraintTop_toBottomOf="@+id/clockin_title" />
+
+    <TextView
+        android:id="@+id/clockin_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="跑步"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/clockin_label_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/clockin_times"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:textSize="18sp"
+        android:text="3"
+        app:layout_constraintBottom_toBottomOf="@+id/clockin_times_text"
+        app:layout_constraintStart_toEndOf="@+id/clockin_times_text"
+        app:layout_constraintTop_toTopOf="@+id/clockin_times_text" />
+
+    <TextView
+        android:id="@+id/textView_ci"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:text="次"
+        app:layout_constraintBottom_toBottomOf="@+id/clockin_times"
+        app:layout_constraintStart_toEndOf="@+id/clockin_times"
+        app:layout_constraintTop_toTopOf="@+id/clockin_times" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
