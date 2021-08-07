@@ -6,5 +6,6 @@ import bean.ClockInLabel;
 
 public interface ClockInView {
     void showLabelInfo(List<ClockInLabel> list);
-    void showError(Throwable throwable);
+    void showError(String message);
+    void showRemoveSuccess(String message);
 }

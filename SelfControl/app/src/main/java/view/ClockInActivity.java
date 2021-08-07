@@ -7,15 +7,18 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +27,10 @@ import com.example.selfcontrol.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import bean.ClockInLabel;
+import bean.ClockInLabelTitle;
 import present.ClockInPresenter;
 
 public class ClockInActivity extends AppCompatActivity implements ClockInView{
@@ -33,6 +38,7 @@ public class ClockInActivity extends AppCompatActivity implements ClockInView{
     RecyclerView mRecyclerView;
     ClockInAdapter mClockInAdapter;
     ClockInPresenter mClockInPresenter;
+    String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50X2lkIjoiMjAyMDIxMzQ4MiIsImV4cCI6MTYyODg3MjU4NSwiaWF0IjoxNjI4MTUyNTg1fQ.w1cYO0TAaB4iiqrQVciKhHiMZmnVuN1VpuNh5kEXqhQ";
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -55,7 +61,7 @@ public class ClockInActivity extends AppCompatActivity implements ClockInView{
         mRecyclerView = findViewById(R.id.clockin_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        getClockInLabel("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50X2lkIjoiMjAyMDIxMzQ4MiIsImV4cCI6MTYyODg3MjU4NSwiaWF0IjoxNjI4MTUyNTg1fQ.w1cYO0TAaB4iiqrQVciKhHiMZmnVuN1VpuNh5kEXqhQ");
+        getClockInLabel(token);
         updateRVUI();
     }
 
@@ -80,19 +86,22 @@ public class ClockInActivity extends AppCompatActivity implements ClockInView{
     }
 
     @Override
-    public void showError(Throwable throwable) {
-        Toast.makeText(this, throwable.toString(), Toast.LENGTH_SHORT).show();
-        System.out.println(throwable.toString());
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showRemoveSuccess(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        getClockInLabel(token);
     }
 
     /**
      * 网络请求: 删除、打卡、获取标签
      */
-    public void removeLabel() {
-    }
+    public void removeLabel(String token, ClockInLabelTitle clockInLabelTitle) { mClockInPresenter.removeLabel(token,clockInLabelTitle);}
 
-    public void toClockInLabel() {
-    }
+    public void toClockIn(String token, String title) { mClockInPresenter.toClockIn(token, title);}
 
     public void getClockInLabel(String token){
         mClockInPresenter.getLabels(token);
@@ -172,8 +181,7 @@ public class ClockInActivity extends AppCompatActivity implements ClockInView{
             holder.clockIn_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int i = clockInLabel.getNumber();
-                    clockInLabel.setNumber(++i);
+                    toClockIn(token, clockInLabel.getTitle());
                     isClockIn[position] = true;
                     notifyDataSetChanged();
                 }
@@ -199,10 +207,41 @@ public class ClockInActivity extends AppCompatActivity implements ClockInView{
             });
 
             holder.clockIn_delete.setOnClickListener(new View.OnClickListener() {
+                Button ok,no;
+                TextView sayingText;
                 @Override
                 public void onClick(View v) {
-                    mClockInLabelList.remove(position);
-                    updateRVUI();
+                    View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.my_clockin_delete_popupwindow, null, false);
+                    final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    //参数为1.View 2.宽度 3.高度
+                    popupWindow.setOutsideTouchable(true);//设置点击外部区域可以取消popupWindow
+                    popupWindow.setFocusable(true);
+
+                    ok = view.findViewById(R.id.delete_yes);
+                    no = view.findViewById(R.id.delete_no);
+                    sayingText = view.findViewById(R.id.sayings);
+                    setSayingText(sayingText);
+
+                    backgroundAlpha(0.5f);
+                    no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            backgroundAlpha(1f);
+                            popupWindow.dismiss();
+                        }
+                    });
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            backgroundAlpha(1f);
+                            removeLabel(token,new ClockInLabelTitle(clockInLabel.getTitle()));
+                            popupWindow.dismiss();
+                            updateRVUI();
+                        }
+                    });
+
+                    popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER,0,0);
                 }
             });
         }
@@ -211,5 +250,48 @@ public class ClockInActivity extends AppCompatActivity implements ClockInView{
         public int getItemCount() {
             return mClockInLabels.size();
         }
+    }
+
+    public void backgroundAlpha(float v) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = v; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
+
+    public void setSayingText(TextView sayingText){
+        Random random = new Random();
+        switch (random.nextInt(9)){
+            case 1:
+                sayingText.setText(R.string.saying1);
+                break;
+            case 2:
+                sayingText.setText(R.string.saying2);
+                break;
+            case 3:
+                sayingText.setText(R.string.saying3);
+                break;
+            case 4:
+                sayingText.setText(R.string.saying4);
+                break;
+            case 5:
+                sayingText.setText(R.string.saying5);
+                break;
+            case 6:
+                sayingText.setText(R.string.saying6);
+                break;
+            case 7:
+                sayingText.setText(R.string.saying7);
+                break;
+            case 8:
+                sayingText.setText(R.string.saying8);
+                break;
+            case 9:
+                sayingText.setText(R.string.saying9);
+                break;
+            case 0:
+                sayingText.setText(R.string.saying0);
+                break;
+        }
+
     }
 }
