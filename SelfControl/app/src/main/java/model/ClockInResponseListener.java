@@ -5,9 +5,11 @@ import java.util.List;
 import bean.ClockInLabel;
 
 public interface ClockInResponseListener {
-    void clockInRequestLabelSuccess(List<ClockInLabel> list);
+    default void clockInRequestLabelSuccess(List<ClockInLabel> list) {}
+
+    default void removeLabelSuccess(String message){}
+
+    default void isClockInToday(boolean isClockIn){}
 
     void clockInRequestFail(String message);
-
-    void removeLabelSuccess(String message);
 }

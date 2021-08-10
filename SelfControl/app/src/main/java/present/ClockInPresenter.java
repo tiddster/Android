@@ -26,38 +26,20 @@ public class ClockInPresenter {
             public void clockInRequestFail(String message) {
                 mClockInView.showError(message);
             }
-
-            @Override
-            public void removeLabelSuccess(String message) {
-
-            }
         });
     }
 
-    public void toClockIn(String token, String title){
-        mClockInModel.toClockIn(token, title, new ClockInResponseListener() {
-            @Override
-            public void clockInRequestLabelSuccess(List<ClockInLabel> list) { }
-
+    public void toClockIn(String token, ClockInLabelTitle clockInLabelTitle){
+        mClockInModel.toClockIn(token, clockInLabelTitle, new ClockInResponseListener() {
             @Override
             public void clockInRequestFail(String message) {
                 mClockInView.showError(message);
-            }
-
-            @Override
-            public void removeLabelSuccess(String message) {
-
             }
         });
     }
 
     public void removeLabel(String token, ClockInLabelTitle clockInLabelTitle){
         mClockInModel.removeLabel(token, clockInLabelTitle, new ClockInResponseListener() {
-            @Override
-            public void clockInRequestLabelSuccess(List<ClockInLabel> list) {
-
-            }
-
             @Override
             public void clockInRequestFail(String message) {
                 mClockInView.showError(message);
@@ -66,6 +48,20 @@ public class ClockInPresenter {
             @Override
             public void removeLabelSuccess(String message) {
                 mClockInView.showRemoveSuccess(message);
+            }
+        });
+    }
+
+    public void isClockInToday(String token, String url, ClockInLabel clockInLabel){
+        mClockInModel.isClockInToday(token, url, new ClockInResponseListener() {
+            @Override
+            public void isClockInToday(boolean isClockIn) {
+                clockInLabel.setClockInToday(isClockIn);
+            }
+
+            @Override
+            public void clockInRequestFail(String message) {
+                mClockInView.showError(message);
             }
         });
     }

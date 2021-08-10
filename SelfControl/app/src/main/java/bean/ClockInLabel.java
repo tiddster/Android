@@ -1,13 +1,14 @@
 package bean;
 
+import com.example.selfcontrol.R;
+
 public class ClockInLabel {
     public int id;
     public int number;
     public String title;
-/*
-    public int mImgID;
+    public boolean isClockInToday;
 
- */
+    public int mImgID;
 
     public ClockInLabel(String title, int number){
         this.title = title;
@@ -22,10 +23,8 @@ public class ClockInLabel {
         this.id = id;
     }
 
-    /*
-    public int getImgID(String title) {
 
-        /*
+    public int getImgID(String title) {
         if (title.equals("吃水果")) mImgID = R.mipmap.chishuiguo;
         if (title.equals("吃早餐")) mImgID = R.mipmap.chizaocan;
         if (title.equals("多喝水")) mImgID = R.mipmap.duoheshui;
@@ -55,12 +54,8 @@ public class ClockInLabel {
         if (title.equals("听力训练")) mImgID = R.mipmap.tinglilianxi;
         if (title.equals("练字")) mImgID = R.mipmap.lianzi;
         if (title.equals("英语阅读训练")) mImgID = R.mipmap.yingyuyueduxunlian;
-
         return mImgID;
     }
-
-     */
-
 
     public int getNumber() {
         return number;
@@ -76,5 +71,13 @@ public class ClockInLabel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isClockInToday() {
+        return isClockInToday;
+    }
+
+    public void setClockInToday(boolean clockInToday) {
+        isClockInToday = clockInToday;
     }
 }
